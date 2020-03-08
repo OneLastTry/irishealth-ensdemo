@@ -1,0 +1,10 @@
+<script language="cache" method="OnPreHTTP" returntype="%Boolean">
+	Set %response.ContentType = "text/xml"
+</script>
+
+<script language="cache" runat="server">
+	If (##class(Demo.HL7v3.TestHarness.MessageTemplate).%ExistsId(%request.Get("messageID")) = 1) {
+		Set tMessage = ##class(Demo.HL7v3.TestHarness.MessageTemplate).%OpenId(%request.Get("messageID"))
+		Do tMessage.Message.OutputToDevice()
+	}
+</script>

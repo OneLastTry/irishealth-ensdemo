@@ -1,0 +1,297 @@
+<html>
+
+<head>
+	<title>Test Harness Home Page</title>
+
+	<link rel="stylesheet" type="text/css" href="testharness.css" title="Standard Style">
+</head>
+
+<style>
+	table.MenuPaneTable {
+		background: #fff8e7;
+	}
+	table.MenuPaneTable th {
+		font-size: 1.0em;
+		font-weight: bold;
+		text-align: left;
+		padding: 5px;
+		font-variant: small-caps;
+		border: 1px darkblue solid;
+	}
+	table.MenuPaneTable th {
+		font-size: 1.0em;
+		text-align: left;
+		padding: 5px;
+	}
+	.MenuPaneItem {
+		font-size: 0.9em;
+		font-weight: bold;
+		text-align: left;
+		padding: 2px;
+		padding-top: 4px;
+		border: 1px #fff8e7 solid;
+	}
+	.MenuPaneItem a {
+		text-decoration: none;
+		color: darkblue;
+	}
+	.MenuPaneItem a:link {
+		color: darkblue;
+	}
+	.MenuPaneItem a:visited {
+		color: darkblue;
+	}
+	.MenuPaneItem a:active {
+		color: darkblue;
+	}
+	.MenuPaneItemHilight {
+		font-size: 0.9em;
+		font-weight: bold;
+		text-align: left;
+		padding: 2px;
+		padding-top: 4px;
+		border: 1px darkblue dotted;
+	}
+	.MenuPaneItemHilight a {
+		text-decoration: none;
+		color: red;
+		cursor: pointer;
+	}
+	.MenuPaneItemHilight a:link {
+		color: red;
+	}
+	.MenuPaneItemHilight a:visited {
+		color: red;
+	}
+	.MenuPaneItemHilight a:active {
+		color: red;
+	}
+	.MenuPaneItemDisabled {
+		font-weight: bold;
+		color: gray;
+		text-align: left;
+		padding: 2px;
+		padding-top: 4px;
+		border: 1px #fff8e7 solid;
+	}
+	.MenuPaneHelpBox {
+		font-size: 0.8em;
+		border-top: 1px darkblue solid;
+		background: #EEFFFF;
+		line-height: 120%;
+		text-align: left;
+		padding: 4px;
+		filter:
+		progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CCDDFF', EndColorStr='#FFFFFF');
+	}
+	.MenuPaneHelpBox b {
+		color: darkblue;
+	}
+	.MenuPaneHelpBoxOff {
+		font-size: 0.8em;
+		border: 1px white solid;
+		line-height: 120%;
+		padding: 4px;
+	}
+	span.MenuPaneSubtitle {
+		font-size: 0.8em;
+		font-weight: normal;
+		font-variant: normal;
+	}
+</style>
+
+<script language="JavaScript">
+	// invoke resize handler if present
+	function resizeHandler()
+	{
+		if (this.onResizeHandler) {
+			this.onResizeHandler();
+		}
+	}
+	
+	// jump directly to requested page
+	function gotoPage(pPage)
+	{
+		self.top.document.location = pPage;
+		
+		return true;
+	}
+	
+	// Hover text help
+	function showMenuHelp(title, text)
+	{
+		var box = self.document.getElementById("helpBox");
+		if (box) {
+			if (null == title || '' == title) {
+				box.className = 'MenuPaneHelpBoxOff';
+				box.innerHTML = '&nbsp;';
+			}
+			else {
+				text = text ? text : '';
+				box.className = 'MenuPaneHelpBox';
+				box.innerHTML = '<b>' + title + '</b><br>' + text;
+			}
+		}
+	}
+</script>
+
+<body style="margin:0px; padding: 0px;" onResize="resizeHandler();">
+	<form name="frmHome" method="post">
+	<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+		<tr>
+			<td colspan="10">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td nowrap width="205" height="100" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: no-repeat; background-image: url("images/logo-topl-intersystems.gif");'>
+							<nobr>&nbsp;
+								<span style="color: gray;">
+									<a target="_top" title="Go to the Test Harness test home page" class="buttonStyleON" href='home.csp'>Home</a>
+									|
+									<a target="_top" title="Report the version of these utilities" class="buttonStyleON" href='home.csp' onClick="alert('Test Harness\nVersion 1.0');">About</a>
+								</span>
+							</nobr>
+						</td>
+						<td nowrap bgcolor="#FFFAE7" valign="top" align="left">
+							<div style="color: darkblue; margin-top:18px; font-weight: bold; font-size:11pt;">Test Harness Home Page</div>
+						</td>
+						<td nowrap width="308" height="78" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: repeat-y; background-image: url("images/opposite-pic-intersys.jpg");'>&nbsp;</td>
+						<td width="2%" bgcolor="#388CCC">&nbsp;</td>
+						<td bgcolor="#388CCC" valign="bottom"></td>
+						<td bgcolor="#388CCC">&nbsp;</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 10pt;">
+			<tr>
+				<td colspan="6" bgcolor="#D36D00"><img src='images/spacer.gif' width="100%" height="2" alt="-" border="0"></td>
+			</tr>
+			<tr>
+				<td colspan="2" valign="center" nowrap style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;">
+					<div align="LEFT" class="Locator">&nbsp;
+						[<a target="_top" href="home.csp">Home</a>]
+					</div>
+				</td>
+				<td style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;" colspan="2">&nbsp;</td>
+			</tr>
+		</table>
+
+		<tr height="100%">
+			<td class="LayoutContentCol" width="80%" ><br>
+				<table width="98%" border="0" cellpadding="10" cellspacing="0">
+					<tr>
+						<td valign="top" width="33%">
+							<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+								<tr>
+									<th nowrap bgcolor="#A097D6">Messages&nbsp;
+										<br>
+										<img src="images/spacer.gif" width="11" height="11" border="0">
+										<span class="MenuPaneSubtitle">Manage Message Database&nbsp;</span>
+									</th>
+								</tr>
+								<tr>
+									<td valign="top" class="MenuPaneItem" onclick="gotoPage('message/message.csp');" onmouseover="this.className='MenuPaneItemHilight'; showMenuHelp('Test Configuration','Manages message database.');" onmouseout="this.className='MenuPaneItem'; showMenuHelp(null,'');">
+										<a title="">
+											<img src="images/prod-box-arrow.gif" alt="*" title="" width="11" height="11" border="0"> Add/Edit/Delete Messages 
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td valign="top" width="33%">
+							<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+								<tr>
+									<th nowrap bgcolor="#05B868">Client&nbsp;
+										<br>
+										<img src="images/spacer.gif" width="11" height="11" border="0">
+										<span class="MenuPaneSubtitle">Manage Client Configuration&nbsp;</span>
+									</th>
+								</tr>
+								<tr>
+									<td valign="top" class="MenuPaneItem" onclick="gotoPage('client/requestmap.csp');" onmouseover="this.className='MenuPaneItemHilight'; showMenuHelp('Test Configuration','Manages automated request configuration.');" onmouseout="this.className='MenuPaneItem'; showMenuHelp(null,'');">
+										<a title="">
+											<img src="images/prod-box-arrow.gif" alt="*" title="" width="11" height="11" border="0"> Automated Request Mappings
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td valign="top" class="MenuPaneItem" onclick="gotoPage('client/automated.csp');" onmouseover="this.className='MenuPaneItemHilight'; showMenuHelp('Test Configuration','Configures and runs the automated test.');" onmouseout="this.className='MenuPaneItem'; showMenuHelp(null,'');">
+										<a title="">
+											<img src="images/prod-box-arrow.gif" alt="*" title="" width="11" height="11" border="0"> Initiate Automated Test
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td valign="top" class="MenuPaneItem" onclick="gotoPage('client/interactive.csp');" onmouseover="this.className='MenuPaneItemHilight'; showMenuHelp('Test Configuration','Configures and runs the interactive test.');" onmouseout="this.className='MenuPaneItem'; showMenuHelp(null,'');">
+										<a title="">
+											<img src="images/prod-box-arrow.gif" alt="*" title="" width="11" height="11" border="0"> Initiate Interactive Test
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td valign="top" width="33%">
+							<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+								<tr>
+									<th nowrap bgcolor="#F9C345">Server&nbsp;
+										<br>
+										<img src="images/spacer.gif" width="11" height="11" border="0">
+										<span class="MenuPaneSubtitle">Manage Server Configuration&nbsp;</span>
+									</th>
+								</tr>
+								<tr>
+									<td valign="top" class="MenuPaneItem" onclick="gotoPage('server/responsemap.csp');" onmouseover="this.className='MenuPaneItemHilight'; showMenuHelp('Test Configuration','Manages automated response configuration.');" onmouseout="this.className='MenuPaneItem'; showMenuHelp(null,'');">
+										<a title="">
+											<img src="images/prod-box-arrow.gif" alt="*" title="" width="11" height="11" border="0"> Automated Response Mappings
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td valign="top" class="MenuPaneItem" onclick="gotoPage('server/responsemode.csp');" onmouseover="this.className='MenuPaneItemHilight'; showMenuHelp('Test Configuration','Toggle between \'automated\' and \'interactive\' response modes.');" onmouseout="this.className='MenuPaneItem'; showMenuHelp(null,'');">
+										<a title="">
+											<img src="images/prod-box-arrow.gif" alt="*" title="" width="11" height="11" border="0"> Toggle Response Mode
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td valign="top" class="MenuPaneItem" onclick="gotoPage('server/interactive.csp');" onmouseover="this.className='MenuPaneItemHilight'; showMenuHelp('Test Configuration','Allows interactive queue manipulation.');" onmouseout="this.className='MenuPaneItem'; showMenuHelp(null,'');">
+										<a title="">
+											<img src="images/prod-box-arrow.gif" alt="*" title="" width="11" height="11" border="0"> Manage Interactive Response Queue
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+	
+				<br>
+	
+				<table border="0" width="90%" height="20%">
+					<tr>
+						<td width="5">&nbsp;</td>
+						<td class="MenuPaneHelpBoxOff" id="helpBox">&nbsp;
+						<td width="50%">&nbsp;</td>
+					</tr>
+				</table>
+			
+				<table border="0" width="90%">
+					<tr>
+						<td align="center" valign="top">
+							<br><br>
+							<p class="footerlinks">
+							<a href="http://www.intersystems.com/index.html"><font color="#004459">www.InterSystems.com</font></a>
+							<br>&copy;
+							<a href="http://www.intersystems.com/copyright/index.html"><font color="#333333">Copyright</font></a>
+							1996-2006 InterSystems Corporation. All Rights Reserved.<br>
+							<p class="footerlinks">&nbsp;</p>
+						</td>
+				  	</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	</form>
+</body>
+</html>

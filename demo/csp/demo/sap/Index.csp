@@ -1,0 +1,141 @@
+<html>
+<body>
+<script language=cache runat=server>
+
+Set tSC=$$$OK
+try {
+
+	#; If this is the first access to this page, then create some defaults	
+	If '$Data(%session.Data("JavaGatewayAddress")) {
+
+		#; Create some reasonable defaults
+		Set tDefaults("JavaGatewayAddress")="127.0.0.1"
+		Set tDefaults("JavaGatewayPort")="55554"
+		Set tDefaults("SAPClient")="000"
+		Set tDefaults("SAPHost")="192.168.68.138"
+		Set tDefaults("SAPLanguage")="EN"
+		Set tDefaults("SAPPassword")="MINISAP"
+		Set tDefaults("SAPSystemNumber")="00"
+		Set tDefaults("SAPUser")="MMSAP"
+	
+		#; Walk through the session data and establish defaults
+		Set tI="" For {
+			Set tI=$Order(tDefaults(tI),1,tDefaultValue) If tI="" Quit
+			Set %session.Data(tI)=tDefaultValue
+	   	}
+	}
+	
+	#; On update on connection details, update the session data 
+	If ($Get(%request.Data("UPDATE",1))'="") {
+		
+		Set tI="" for {
+			Set tI=$order(%request.Data(tI),1) If tI="" Quit
+			Set %session.Data(tI)=%request.Data(tI,1)
+		}
+	}
+	
+	&html<
+	<form method="post">
+	<h1>Connection Details</h1>
+	<table>
+	<tr><td>SAP Host</td><td><input type="text" size="20" name="SAPHost" value="#(..EscapeHTML(%session.Data("SAPHost")))#"/></td></tr>
+	<tr><td>SAP Client</td><td><input type="text" size="20" name="SAPClient" value="#(..EscapeHTML(%session.Data("SAPClient")))#"/></td></tr>
+	<tr><td>SAP System</td><td><input type="text" size="20" name="SAPSystemNumber" value="#(..EscapeHTML(%session.Data("SAPSystemNumber")))#"/></td></tr>
+	<tr><td>SAP Language</td><td><input type="text" size="20" name="SAPLanguage" value="#(..EscapeHTML(%session.Data("SAPLanguage")))#"/></td></tr>
+	<tr><td>SAP User</td><td><input type="text" size="20" name="SAPUser" value="#(..EscapeHTML(%session.Data("SAPUser")))#"/></td></tr>
+	<tr><td>SAP Password</td><td><input type="text" size="20" name="SAPPassword" value="#(%session.Data("SAPPassword"))#"/></td></tr>
+	<tr><td>Java Gateway Address</td><td><input type="text" size="20" name="JavaGatewayAddress" value="#(..EscapeHTML(%session.Data("JavaGatewayAddress")))#"/></td></tr>
+	<tr><td>Java Port</td><td><input type="text" size="20" name="JavaGatewayPort" value="#(..EscapeHTML(%session.Data("JavaGatewayPort")))#"/></td></tr>
+	</table>
+	<br>
+	<input type=submit name="UPDATE" value="Update">
+	</form>
+
+	<form method="post">
+	<h1>SAP BAPIs/RFCs</h1>
+	<table>
+	<tr><td><input type=text name="SUBSTRING" value='#($$$UPPER($Get(%request.Data("SUBSTRING",1),"STFC")))#'></td></tr>
+	</table>
+	<br>
+	<input type=submit name="SEARCH" value="Search">
+	</form>
+	>
+	
+	If ($Get(%request.Data("SEARCH",1))'="")&&($Get(%request.Data("SUBSTRING",1))'="") {
+			
+		#; Create an instance of the utility object
+		Kill %objlasterror
+		Set tUtils=##class(EnsLib.SAP.Utils).%New()
+		If '$IsObject(tUtils) Set tSC=$Get(%objlasterror,$$$ERROR($$$FailedToNewClass,"EnsLib.SAP.Utils")) Quit
+
+		#; Initialize that object's properties from session data
+		For tI="SAPClient","SAPHost","SAPLanguage","SAPUser","SAPPassword","SAPSystemNumber","JavaGatewayAddress","JavaGatewayPort" {
+			Set $zobjproperty(tUtils,tI)=%session.Data(tI)
+		}
+
+		#; Connect to SAP
+		Set tSC=tUtils.Connect() If $$$ISERR(tSC) Quit
+	
+		Set tSC=tUtils.GetBAPIList(.tBAPIS,%request.Data("SUBSTRING",1))
+		If $$$ISERR(tSC)
+		
+		&html<<h2>Number of matching BAPIs: #(tBAPIS.Count())#</h2>>
+		&html<<table>>
+		For tI=1:1:tBAPIS.Count() {
+			Write !,"<tr><td>",tI,"</td><td><a href='BAPI.csp?BAPI=",..EscapeURL(tBAPIS.GetAt(tI)),"'>",tBAPIS.GetAt(tI),"</a></td></tr>"
+		}
+		&html<</table>>
+	
+		Set tSC=tUtils.GetRFCList(.tRFCS,%request.Data("SUBSTRING",1))
+		If $$$ISERR(tSC) Quit
+		
+		&html<<h2>Number of matching RFCs: #(tRFCS.Count())#</h2>>
+		&html<<table>>
+		For tI=1:1:tRFCS.Count() {
+			Write !,"<tr><td>",tI,"</td><td><a href='BAPI.csp?BAPI=",..EscapeURL(tRFCS.GetAt(tI)),"'>",tRFCS.GetAt(tI),"</a></td></tr>"
+		}
+		&html<</table>>
+		
+	} 
+	
+} catch (e) {
+	Set tSC=e.AsStatus()
+}
+
+If $$$ISERR(tSC) 
+{
+	Do $System.Status.DisplayError(tSC)
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

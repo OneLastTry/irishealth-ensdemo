@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  ensdemo:
+    image: store/intersystems/irishealth-community:ensdemo
+    init: true
+    build:
+      context: .
+    hostname: ensdemo
+    container_name: ensdemo
+    ports:
+    - "9091:51773"
+    - "9092:52773"
+    restart: on-failure
+    volumes:
+    - type: bind
+      source: ./src
+      target: /src
+    - type: bind
+      source: ./shared
+      target: /shared
+    - type: bind
+      source: ./durable
+      target: /dur
+
+    environment:
+      - ISC_DATA_DIRECTORY=/dur/db/iris_conf.d

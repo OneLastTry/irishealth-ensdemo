@@ -1,0 +1,248 @@
+<html>
+
+<head>
+	<title>Test Harness Response Map</title>
+
+	<link rel="stylesheet" type="text/css" href="../testharness.css" title="Standard Style">
+</head>
+
+<script language="JavaScript">
+	// invoke resize handler if present
+	function resizeHandler()
+	{
+		if (this.onResizeHandler) {
+			this.onResizeHandler();
+		}
+	}
+
+	// save response
+	function saveResponse(pResponseMapID)
+	{
+		var tXPathContext		= eval('self.document.frmResponseMap.txtXPathContext' + pResponseMapID + '.value');
+		var tXPathExpression	= eval('self.document.frmResponseMap.txtXPathExpression' + pResponseMapID + '.value');
+		var tXPathValue			= eval('self.document.frmResponseMap.txtXPathValue' + pResponseMapID + '.value');
+		var tMessageID			= eval('self.document.frmResponseMap.mnuMessageTypes' + pResponseMapID + '.value');
+		
+		#server(..saveResponse(pResponseMapID, tXPathContext, tXPathExpression, tXPathValue, tMessageID))#;
+
+		return;
+	}
+
+	// delete response
+	function deleteResponse(pResponseMapID)
+	{
+		#server(..deleteResponse(pResponseMapID))#;
+
+		return;
+	}
+
+	// open new message map dialog
+	function openNewMessageMapWindow() {
+		tWindow = window.open('newresponsemap.csp', 'NewResponseMap', 'height=600,width=1250,scrollbars=no,resizable=yes');
+	
+		return;
+	}
+
+	// view message
+	function viewMessage(pMessageID) {
+		tWindow = window.open('../message/viewmessage.csp?messageID=' + pMessageID, 'MessageViewer', 'height=600,width=1325,scrollbars=yes,resizable=yes');
+	
+		return;
+	}
+</script>
+
+<script language="cache" method="saveResponse" arguments="pResponseMapID,pXPathContext,pXPathExpression,pXPathValue,pMessageID" returntype="%Boolean">
+	If (##class(Demo.HL7v3.TestHarness.ResponseMap).%ExistsId(pResponseMapID) = 1) {
+		Set tResponse = ##class(Demo.HL7v3.TestHarness.ResponseMap).%OpenId(pResponseMapID)
+	}
+	Else {
+		&js<
+			alert('Response Map ID not found:  #(pResponseMapID)#');
+		>
+		
+		Quit 0
+	}
+
+	Set tResponse.XPathContext		= pXPathContext
+	Set tResponse.XPathExpression	= pXPathExpression
+	Set tResponse.XPathValue		= pXPathValue
+	Set tResponse.Response			= ##class(Demo.HL7v3.TestHarness.MessageTemplate).%OpenId(pMessageID)
+
+	Set tStatus = tResponse.%Save()
+	If (tStatus = 1) {
+		&js<
+			alert('Response map saved successfully, ID:  #(tResponse.%Id())#');
+		>
+	}
+	Else {
+		&js<
+			alert('ERROR:  Response map not saved');
+		>
+	}
+	
+	Quit +tStatus
+</script>
+
+<script language="cache" method="deleteResponse" arguments="pResponseMapID" returntype="%Boolean">
+	Set tStatus = ##class(Demo.HL7v3.TestHarness.ResponseMap).%DeleteId(pResponseMapID)
+	
+	If (tStatus = 1) {
+		&js<
+			alert('Response map deleted successfully, ID:  #(pResponseMapID)#');
+			
+			self.document.location = 'responsemap.csp';
+		>
+	}
+	
+	Else {
+		&js<
+			alert('ERROR:  Response map NOT deleted:  #(pResponseMapID)#');
+		>
+	}
+
+	Quit +tStatus
+</script>
+
+<script language="sql" name="qResponseExtent">
+	Select ID From Demo_HL7v3_TestHarness.ResponseMap Order By ID
+</script>
+
+<script language="sql" name="qMessages">
+	Select ID,Name From Demo_HL7v3_TestHarness.MessageTemplate Where Type='Response' Order By Name
+</script>
+
+<body style="margin:0px; padding: 0px;" onresize="resizeHandler();">
+	<form name="frmResponseMap" method="post" enctype="multipart/form-data" action="responsemap.csp">
+		<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td colspan="10">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td nowrap width="205" height="100" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: no-repeat; background-image: url("../images/logo-topl-intersystems.gif");'>
+							<nobr>&nbsp;
+								<span style="color: gray;">
+									<a target="_top" title="Go to the Test Harness test home page" class="buttonStyleON" href='../home.csp'>Home</a>
+									|
+									<a target="_top" title="Report the version of these utilities" class="buttonStyleON" href='responsemap.csp' onClick="alert('Test Harness\nVersion 1.0');">About</a>
+								</span>
+							</nobr>
+						</td>
+						<td nowrap bgcolor="#FFFAE7" valign="top" align="left">
+							<div style="color: darkblue; margin-top:18px; font-weight: bold; font-size:11pt;">Test Harness Response Map</div>
+						</td>
+						<td nowrap width="308" height="78" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: repeat-y; background-image: url("../images/opposite-pic-intersys.jpg");'>&nbsp;</td>
+						<td width="2%" bgcolor="#388CCC">&nbsp;</td>
+						<td bgcolor="#388CCC" valign="bottom"></td>
+						<td bgcolor="#388CCC">&nbsp;</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+	
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 10pt;">
+				<tr>
+					<td colspan="6" bgcolor="#D36D00"><img src='../images/spacer.gif' width="100%" height="2" alt="-" border="0"></td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="center" nowrap style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;">
+						<div align="LEFT" class="Locator">&nbsp;
+							[<a target="_top" href="../home.csp">Home</a>]
+							&gt;
+							[<a target="_top" href="responsemap.csp">Automated Response Mappings</a>]
+						</div>
+					</td>
+					<td style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+	
+			<tr height="100%">
+				<td class="LayoutContentCol" width="80%" ><br>
+					<table width="98%" border="0" cellpadding="10" cellspacing="0">
+						<tr>
+							<td valign="top" width="22%">
+								<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+									<tr>
+										<th nowrap bgcolor="#F9C345">Response Mappings&nbsp;
+											<br>
+											<img src="../images/spacer.gif" width="11" height="11" border="0">
+											<span class="MenuPaneSubtitle">Configure Automated Response Mappings&nbsp;</span>
+										</th>
+									</tr>
+									<tr>
+									<!-- Begin content -->
+										<table class="DetailTable" border="1" cellpadding="5" cellspacing="0">
+											<csp:while condition="qResponseExtent.Next()" counter="tCounter">
+											<csp:if condition="tCounter = 1">
+											<tr>
+												<th nowrap align="left" title="Response Map ID">Response Map ID</th>
+												<th nowrap align="left" title="XPath context to use -- Example:  /staff/doc/name[@last='Marston']">XPath Context</th>
+												<th nowrap align="left" title="XPath expression to use -- Example:  text()">XPath Expression</th>
+												<th nowrap align="left" title="XPath value to match against -- Example:  Dr. Jones">XPath Value</th>
+												<th nowrap align="left" title="Response message to use">Response Message</th>
+												<th nowrap align="left" title="Action to take">Actions</th>
+											</tr>
+											</csp:if>
+											
+											<script language="cache" runat="server">
+												Set tResponseMapID 		= qResponseExtent.Data("ID")
+												Set tResponseMap		= ##class(Demo.HL7v3.TestHarness.ResponseMap).%OpenId(tResponseMapID)
+												Set tXPathContext		= tResponseMap.XPathContext
+												Set tXPathExpression	= tResponseMap.XPathExpression
+												Set tXPathValue			= tResponseMap.XPathValue
+												Set tResponseID			= tResponseMap.Response.%Id()
+											</script>
+											<tr>
+												<td valign="top" class="DetailValue" nowrap title="Response Map ID: #(tResponseMapID)#">#(tResponseMapID)#</td>
+												<td valign="top" class="DetailValue" nowrap title="XPath context to use -- Example:  /staff/doc/name[@last='Marston']">
+													<input type="text" name="txtXPathContext#(tResponseMapID)#" value="#(tXPathContext)#">
+												</td>
+												<td valign="top" class="DetailValue" nowrap title="XPath expression to use -- Example:  text()">
+													<input type="text" name="txtXPathExpression#(tResponseMapID)#" value="#(tXPathExpression)#">
+												</td>
+												<td valign="top" class="DetailValue" nowrap title="XPath value to match against -- Example:  Dr. Jones">
+													<input type="text" name="txtXPathValue#(tResponseMapID)#" value="#(tXPathValue)#">
+												</td>
+												<td valign="top" class="DetailValue" align="center" nowrap title="Response message to use">
+													<select name="mnuMessageTypes#(tResponseMapID)#">
+														<csp:while condition="qMessages.Next()">
+															<script language="cache" runat="server">
+																Set tMessageID		= qMessages.Data("ID")
+																Set tMessageName	= qMessages.Data("Name")
+															</script>
+															
+															<option value="#(tMessageID)#" #($Case(tResponseID=tMessageID, 1:"selected", :""))#>#(tMessageName)#</option>
+														</csp:while>
+														<script language="cache" runat="server">
+															Do qMessages.Close()
+															Do qMessages.Execute()
+														</script>
+													</select>
+													<input type="button" name="btnViewMessage" title="Open message in new window" value="View Message" onClick="viewMessage(self.document.frmResponseMap.mnuMessageTypes#(tResponseMapID)#.options[self.document.frmResponseMap.mnuMessageTypes#(tResponseMapID)#.selectedIndex].value);">
+												</td>
+												<td valign="top" class="DetailValue" align="center" nowrap title="Action to take">
+													<input type="button" name="btnSaveResponse#(tResponseMapID)#" title="Save response map" value="Save Response" onClick="saveResponse(#(tResponseMapID)#);">
+													<input type="button" name="btnDeleteResponse#(tResponseMapID)#" title="Delete response map" value="Delete Response" onClick="deleteResponse(#(tResponseMapID)#);">
+												</td>
+											</tr>
+											</csp:while>
+										</table>
+										
+										<table border="0" cols="2">
+											<tr>
+												<td class="AutoFormButton">
+													<input class="AutoFormButton" type="button" name="btnNewResponseMap" value="New Response Map" onClick="openNewMessageMapWindow();">
+												</td>
+											</tr>
+										</table>
+									<!-- End content -->
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

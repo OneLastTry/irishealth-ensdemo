@@ -1,0 +1,51 @@
+<html>
+<body>
+<h1>SAP BAPI/RFC Message Generator</h1>
+<br />
+<h1>BAPI/RFC: #(%request.Get("BAPI"))#</h1>
+<script language="CACHE" runat="SERVER">
+
+If %request.Get("BAPI")'="" {
+		
+	Set tSC=$$$OK
+	try {
+		
+		#; Create an instance of the utility object
+		Kill %objlasterror
+		Set tUtils=##class(EnsLib.SAP.Utils).%New()
+		If '$IsObject(tUtils) Set tSC=$Get(%objlasterror,$$$ERROR($$$FailedToNewClass,"EnsLib.SAP.Utils")) Quit
+
+		#; Initialize that object's properties from supplied data
+		For tI="SAPClient","SAPHost","SAPLanguage","SAPUser","SAPPassword","SAPSystemNumber","JavaGatewayAddress","JavaGatewayPort" {
+					
+			Set $zobjproperty(tUtils,tI)=%session.Data(tI)
+		}
+	
+		Set tSC=tUtils.CreateClasses(%request.Get("BAPI"),%request.Get("package"))
+		If '$$$ISERR(tSC) {
+			&html<<br><br><h1>Generated</h1>
+			<a href="/csp/documatic/%25CSP.Documatic.cls?LIBRARY=#($znspace)#&CLASSNAME=#($S(%request.Get("package")'="":%request.Get("package"),1:$TR(%request.Get("BAPI"),"_",".")))#.ISCuRequest">Class Documentation Request</a>
+			<br />
+			<a href="/csp/documatic/%25CSP.Documatic.cls?LIBRARY=#($znspace)#&CLASSNAME=#($S(%request.Get("package")'="":%request.Get("package"),1:$TR(%request.Get("BAPI"),"_",".")))#.ISCuResponse">Class Documentation Response</a>
+			>
+		} Else {
+			&html<<br><br><h1>Errored</h1>>
+		}
+		
+		&html<<br/><br />>
+		Set tPackage=$Select(%request.Get("package")'="":%request.Get("package"),1:$Translate(%request.Get("BAPI"),"_","."))
+		Do $system.OBJ.CompilePackage(tPackage,"b-u-d",.errorlog)
+		&html<<br/><h1>Compile-Errors: #(errorlog)#</h1></br>>
+		
+	} catch (e) {
+		Set tSC=e.AsStatus()
+	}
+	If $$$ISERR(tSC) 
+	{
+		Do $System.Status.DisplayError(tSC)
+	}
+}
+</script>
+</body>
+</html>
+

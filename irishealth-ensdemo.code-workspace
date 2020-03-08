@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "main",
+			"path": ".",
+			"objectscript.conn.active": false
+		},
+		{
+			"name": "ensdemo",
+			"path": "src"
+		}
+	],
+	"settings": {
+		"objectscript.conn.active": false
+	}
+}

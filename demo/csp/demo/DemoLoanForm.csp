@@ -1,0 +1,23 @@
+<html>
+<head>
+<LINK REL="stylesheet" TYPE="text/css" HREF="csputils.css" TITLE="Standard Style" >
+</head>
+<body>
+<h1><csp:text TextId="FindRate" Domain="Ensemble">Find Rate</csp:text></h1>
+<form action="DemoLoanSubmit.csp">
+<div align="center" class="text1" TextId="DemoLoanTitle" Domain="Ensemble">
+Welcome to FindRate. Please make a loan request using the form below.
+</div>
+<div align="center">
+<table>
+<tr><td align=right><csp:text TextId="Amount" Domain="Ensemble">Amount</csp:text>:</td><td><input name="Amount" value=100></td></tr>
+<tr><td align=right><csp:text TextId="Name" Domain="Ensemble">Name</csp:text>:</td><td><input name="Name" value=mo></td></tr>
+<tr><td align=right><csp:text TextId="TaxID" Domain="Ensemble">TaxID</csp:text>:</td><td><input name="TaxID" value=123-45-6789></td></tr>
+<tr><td align=right><csp:text TextId="Nationality" Domain="Ensemble">Nationality</csp:text>:</td><td><input name="Nationality" value=USA></td></tr>
+<tr><td align=right><csp:text TextId="Email" Domain="Ensemble">Email</csp:text>:</td><td><input name="EMail"></td></tr>
+<tr><td align=right>&nbsp;</td><td align=right><input type=submit TextId="Apply" Domain="Ensemble" value="Apply"></td></tr>
+</table>
+</div>
+</form>
+</body>
+</html>

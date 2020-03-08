@@ -1,0 +1,189 @@
+<html>
+
+<head>
+	<title>Test Harness New Request Map</title>
+
+	<link rel="stylesheet" type="text/css" href="../testharness.css" title="Standard Style">
+</head>
+
+<script language="javascript">
+	// invoke resize handler if present
+	function resizeHandler() {
+		if (this.onResizeHandler) {
+			this.onResizeHandler();
+		}
+	}
+
+	// save request
+	function saveRequest()
+	{
+		var tClassName	= self.document.frmNewRequestMap.txtClassName.value;
+		var tMethodName	= self.document.frmNewRequestMap.txtMethodName.value;
+		var tMessageID	= self.document.frmNewRequestMap.mnuMessageTypes.value;
+		
+		if (tMessageID == '') {
+			alert('Cannot save a map with a NULL message type');
+			
+			return;
+		}
+		
+		#server(..saveRequest(tClassName, tMethodName, tMessageID))#;
+
+		return;
+	}
+
+	// delete request
+	function deleteRequest()
+	{
+		window.close();
+
+		return;
+	}
+
+	// view message
+	function viewMessage(pMessageID) {
+		tWindow = window.open('../message/viewmessage.csp?messageID=' + pMessageID, 'MessageViewer', 'height=600,width=1325,scrollbars=yes,resizable=yes');
+	
+		return;
+	}
+</script>
+
+<script language="cache" method="saveRequest" arguments="pClassName,pMethodName,pMessageID" returntype="%Boolean">
+	&sql(
+		Select	ID
+		Into	:tRequestMapID
+		From	Demo_HL7v3_TestHarness.RequestMap
+		Where	Request = :pMessageID
+	)
+
+	If (SQLCODE = 0) {
+		Set tRequest = ##class(Demo.HL7v3.TestHarness.RequestMap).%OpenId(tRequestMapID)
+	}
+	Else {
+		Set tRequest = ##class(Demo.HL7v3.TestHarness.RequestMap).%New()
+	}
+
+	Set tRequest.ClassName	= pClassName
+	Set tRequest.MethodName	= pMethodName
+	Set tRequest.Request	= ##class(Demo.HL7v3.TestHarness.MessageTemplate).%OpenId(pMessageID)
+
+	Set tStatus = tRequest.%Save()
+	If (tStatus = 1) {
+		&js<
+			alert('Request map saved successfully, ID:  #(tRequest.%Id())#');
+			
+			window.close();
+			opener.window.document.location.reload();
+		>
+	}
+	Else {
+		&js<
+			alert('ERROR:  Request map not saved -- only one map per message name allowed.');
+		>
+	}
+	
+	Quit +tStatus
+</script>
+
+<script language="sql" name="qMessages">
+	Select ID,Name From Demo_HL7v3_TestHarness.MessageTemplate Where Type='Request' Order By ID
+</script>
+
+<body style="margin:0px; padding: 0px;" onresize="resizeHandler();">
+	<form name="frmNewRequestMap" method="post" enctype="multipart/form-data" action="automated.csp">
+		<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td colspan="10">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td nowrap width="205" height="100" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: no-repeat; background-image: url("../images/logo-topl-intersystems.gif");'>
+							<nobr>&nbsp;
+								<span style="color: gray;">
+									<a target="_top" title="Report the version of these utilities" class="buttonStyleON" href='newrequestmap.csp' onClick="alert('Test Harness\nVersion 1.0');">About</a>
+								</span>
+							</nobr>
+						</td>
+						<td nowrap bgcolor="#FFFAE7" valign="top" align="left">
+							<div style="color: darkblue; margin-top:18px; font-weight: bold; font-size:11pt;">Test Harness New Request Map</div>
+						</td>
+						<td nowrap width="308" height="78" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: repeat-y; background-image: url("../images/opposite-pic-intersys.jpg");'>&nbsp;</td>
+						<td width="2%" bgcolor="#388CCC">&nbsp;</td>
+						<td bgcolor="#388CCC" valign="bottom"></td>
+						<td bgcolor="#388CCC">&nbsp;</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+	
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 10pt;">
+				<tr>
+					<td colspan="6" bgcolor="#D36D00"><img src='../images/spacer.gif' width="100%" height="2" alt="-" border="0"></td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="center" nowrap style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;"></td>
+					<td nowrap align="right" valign="center" style="color: black; font-size: 0.8em; background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;" colspan="2"></td>
+					<td style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+	
+			<tr height="100%">
+				<td class="LayoutContentCol" width="80%" ><br>
+					<table width="98%" border="0" cellpadding="10" cellspacing="0">
+						<tr>
+							<td valign="top" width="22%">
+								<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+									<tr>
+										<th nowrap bgcolor="#05B868">New Request Map&nbsp;
+											<br>
+											<img src="../images/spacer.gif" width="11" height="11" border="0">
+											<span class="MenuPaneSubtitle">Create New Request Map&nbsp;</span>
+										</th>
+									</tr>
+									<tr>
+									<!-- Begin content -->
+										<table class="DetailTable" border="1" cellpadding="5" cellspacing="0">
+											<tr>
+												<th nowrap align="left" title="Request message to use">Request Message</th>
+												<th nowrap align="left" title="Enter the name of the proxy class">Class Name</th>
+												<th nowrap align="left" title="Enter the method name to call">Method Name</th>
+												<th nowrap align="left" title="Action to take">Actions</th>
+											</tr>
+											<tr>
+												<td valign="top" class="DetailValue" align="center" nowrap title="Request message to use">
+													<select name="mnuMessageTypes">
+														<csp:while condition="qMessages.Next()">
+															<script language="cache" runat="server">
+																Set tMessageID		= qMessages.Data("ID")
+																Set tMessageName	= qMessages.Data("Name")
+															</script>
+															
+															<option value="#(tMessageID)#">#(tMessageName)#</option>
+														</csp:while>
+													</select>
+													<input type="button" name="btnViewMessage" title="Open message in new window" value="View Message" onClick="viewMessage(self.document.frmNewRequestMap.mnuMessageTypes.options[self.document.frmNewRequestMap.mnuMessageTypes.selectedIndex].value);">
+												</td>
+												<td valign="top" class="DetailValue" nowrap title="Enter the name of the proxy class">
+													<input type="text" size="45" name="txtClassName" value="Demo.HL7v3.TestHarness.HL7v3SOAPInProxy">
+												</td>
+												<td valign="top" class="DetailValue" nowrap title="Enter the method name to call">
+													<input type="text" name="txtMethodName" value="SendMessage">
+												</td>
+												<td valign="top" class="DetailValue" align="center" nowrap title="Action to take">
+													<input type="button" name="btnSaveRequest" title="Save request map" value="Save Map" onClick="saveRequest();">
+													<input type="button" name="btnDeleteRequest" title="Delete request map" value="Delete Map" onClick="deleteRequest();">
+												</td>
+											</tr>
+										</table>
+									<!-- End content -->
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+
+</html>

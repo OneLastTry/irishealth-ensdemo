@@ -1,0 +1,158 @@
+<html>
+<body>
+<h1>SAP BAPI/RFC Message Structure for: #($Get(%request.Data("BAPI",1)))#</h1>
+<form action="MsgGen.csp">
+<input type="hidden" name="BAPI" value="#($Get(%request.Data("BAPI",1)))#">
+<table>
+<tr><td>PackageName:</td></tr>
+<tr><td><input type="text" size="60" name="package" value="#($TR($Get(%request.Data("BAPI",1)),"_","."))#"></td></tr>
+<tr><td><input type="submit" name="submit" value="Generate"></td></tr>
+</table>
+</form>
+
+<script language=cache runat=server>
+	
+	#include EnsSAPJCO
+	
+	Set tFunctionName=$Get(%request.Data("BAPI",1))
+	If tFunctionName'="" {
+		
+		Set tSC=$$$OK
+		try {
+			Set tJavaGatewayConnected = 0
+			
+			#; Create an instance of the utility object
+			Kill %objlasterror
+			Set tUtils=##class(EnsLib.SAP.Utils).%New()
+			If '$IsObject(tUtils) Set tSC=$Get(%objlasterror,$$$ERROR($$$FailedToNewClass,"EnsLib.SAP.Utils")) Quit
+
+			#; Initialize that object's properties from supplied data
+			for tI="SAPClient","SAPHost","SAPLanguage","SAPUser","SAPPassword","SAPSystemNumber","JavaGatewayAddress","JavaGatewayPort" {		
+				Set $zobjproperty(tUtils,tI)=%session.Data(tI)
+			}
+			
+			#; Connect to SAP
+			Set tSC=tUtils.Connect(.tJavaGateway,.tConnection,.tRepository)
+			If $$$ISERR(tSC) Quit
+			
+			#; We are connected
+			Set tJavaGatewayConnected = 1
+			
+			#; Get the function
+			Set tFunction=tRepository.getFunction(tFunctionName) 
+			If '$IsObject(tFunction) Quit
+		
+   			
+   			#; Display the Import Parameter List
+   			Set tInputParameterList=tFunction.getImportParameterList()
+   			If $IsObject(tInputParameterList) {
+				
+				&html<<table border="1">>
+   				&html<<tr><th colspan="4" align="left">Input [fieldcount: #(tInputParameterList.getFieldCount())#]</th></tr>>
+				Do ..ShowParameterList(tInputParameterList)
+				&html<</table>>
+   			}
+   			
+   			&html<<br>>
+   			
+   			#; Display the Output Parameter List
+   			Set tOutputParameterList=tFunction.getExportParameterList()
+   			If $IsObject(tOutputParameterList){	
+	   			&html<<table border="1">>	
+   				&html<<tr><th colspan="4" align="left">Output [fieldcount: #(tOutputParameterList.getFieldCount())#]</th></tr>>
+				Do ..ShowParameterList(tOutputParameterList)
+				&html<</table>>
+   			}
+   			
+   			&html<<br>>
+   			
+   			#; Display Any Tables
+   			Set tTableParameters=tFunction.getTableParameterList()
+   			If $IsObject(tTableParameters) {
+   				
+   				&html<<table border="1">>
+   				Set tTableCount=tTableParameters.getFieldCount()
+				&html<<tr><th colspan="4" align="left">Tables [tablecount: #(tTableCount)#]</th></tr>>
+	
+				Set tTableMetaData=tTableParameters.getListMetaData()
+				
+				For tI=0:1:tTableCount-1 {
+				
+					&html<<tr><td></td><td>>
+					Write tTableMetaData.getName(tI)
+					&html<</td></tr>>
+				}
+				&html<</table>>
+			}
+   				
+		} catch (e) {
+			Set tSC=e.AsStatus()
+		}
+		
+		If $$$ISERR(tSC) 
+		{
+			Do $System.Status.DisplayError(tSC)
+		}
+		
+		If tJavaGatewayConnected=1 Do tJavaGateway.%Disconnect()
+	}
+	
+	</script>
+	
+	 <script language="Cache" method="ShowParameterList" arguments="pParamList:%ObjectHandle">
+	 
+   	#; Get the parameter list meta data
+   	Set tJCoMetaData=pParamList.getListMetaData()
+   	
+   	For tI=0:1:pParamList.getFieldCount()-1 {
+	   	
+	   	#; Get the SAP field name
+		Set tSapFieldName=tJCoMetaData.getName(tI)
+		
+		#; Get the type of the field as a String
+		Set tSapTypeName=tJCoMetaData.getTypeAsString(tI)
+		
+		If tSapTypeName'="STRUCTURE" {
+  			&html<<tr><td>#(tSapFieldName)#</td><td align="left">%String(MAXLEN=#(tJCoMetaData.getLength(tI))#)</td>>
+  			&html<<td>#(##class(%CSP.Page).EscapeHTML(tJCoMetaData.getDescription(tI)))#</td></tr>>
+		} else {
+			&html<<tr><td>#(tSapFieldName)#</td><td align="left">#($$$SapName2EnsName(tSapFieldName))#</td>>
+			&html<<td>#(##class(%CSP.Page).EscapeHTML(tJCoMetaData.getDescription(tI)))#</td></tr>>
+			
+			&html<<tr><td></td><td><table border="1">>
+  			Do ..ShowStructure(pParamList,tI)
+  			&html<</table></td></tr>>
+		}
+		
+	}
+	</script>
+		
+	<script language="Cache" method="ShowStructure" arguments="pParamList:%ObjectHandle,pIndex:%Integer">
+	
+	Set tSapFieldName=tJCoMetaData.getName(pIndex)
+	
+	Set tStructure=pParamList.getStructure(tSapFieldName)
+	
+	Set tStructureMetaData=tStructure.getRecordMetaData()
+	
+   	For tJ=0:1:tStructure.getFieldCount()-1 {
+	   	
+	   	#; Get the type of the field as a String
+		Set tSapTypeName=tStructureMetaData.getTypeAsString(tJ)
+		
+		#; Get the SAP field name
+		Set tSapFieldName=tStructureMetaData.getName(tJ)
+
+		If tSapTypeName'="STRUCTURE" {
+			&html<<tr><td>#(tSapFieldName)#</td><td align="left">%String(MAXLEN=#(tStructureMetaData.getLength(tJ))#)</td>>
+		} else {
+			&html<<tr><td>#(tSapFieldName)#</td><td align="left">#($$$SapName2EnsName(tSapFieldName))#</td>>
+		}
+		&html<<td>#(##class(%CSP.Page).EscapeHTML(tStructureMetaData.getDescription(tJ)))#</td></tr>>
+	}
+	   
+	</script>
+	
+   </body>
+</html>
+

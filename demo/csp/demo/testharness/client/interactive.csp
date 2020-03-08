@@ -1,0 +1,238 @@
+<html>
+
+<head>
+	<title>Test Harness Interactive Client</title>
+
+	<link rel="stylesheet" type="text/css" href="../testharness.css" title="Standard Style">
+</head>
+
+<script language="JavaScript">
+	// invoke resize handler if present
+	function resizeHandler()
+	{
+		if (this.onResizeHandler) {
+			this.onResizeHandler();
+		}
+	}
+
+	// load message
+	function loadMessage(pMessageID) {
+		self.document.frmInteractive.txtRequest.value = '';
+		
+		#server(..loadMessage(pMessageID))#;
+	
+		return;
+	}
+
+	// send message
+	function sendMessage(pClass, pMethod, pRequest)
+	{
+		#server(..sendMessage(pClass, pMethod, pRequest))#;
+
+		return;
+	}
+
+	// view message
+	function viewMessage(pMessageID) {
+		tWindow = window.open('../message/viewmessage.csp?messageID=' + pMessageID, 'MessageViewer', 'height=600,width=1325,scrollbars=yes,resizable=yes');
+	
+		return;
+	}
+</script>
+
+<script language="cache" method="loadMessage" arguments="pMessageID:%Integer">
+	Set tMessage = ##class(Demo.HL7v3.TestHarness.MessageTemplate).%OpenId(pMessageID)
+	
+	While 'tMessage.Message.AtEnd {
+		Set tValue = tMessage.Message.Read(32767)
+		
+		&js<
+			self.document.frmInteractive.txtRequest.value = self.document.frmInteractive.txtRequest.value + #(..QuoteJS(tValue))#;
+		>
+	}
+	
+	Quit
+</script>
+
+<script language="cache" method="sendMessage" procedureblock="0" arguments="pClass:%String,pMethod:%String,pRequest:%Library.GlobalCharacterStream">
+	If (pClass = "") {
+		&js<
+			alert('Missing required field:  Class Name');
+			
+			self.document.frmInteractive.txtClass.focus();
+		>
+		
+		Quit
+	}
+	If (pMethod = "") {
+		&js<
+			alert('Missing required field:  Method Name');
+			
+			self.document.frmInteractive.txtMethod.focus();
+		>
+		
+		Quit
+	}
+
+	&js<
+		self.document.frmInteractive.txtResponse.value = 'Waiting for response...';
+	>
+
+	Set tBegin = $ZHorolog
+	
+	Set tRequest = ##class(%GlobalCharacterStream).%New()
+	Do tRequest.Write(pRequest), tRequest.Rewind()
+	Set tStatus = ##class(Demo.HL7v3.TestHarness.MessageGenerator).ProcessStream(.tRequest)
+	Set tRequestSize = tRequest.Size
+	
+	Set tService = $zobjclassmethod(pClass, "%New")
+	Set @("tResponse = tService." _ pMethod _ "(tRequest)")
+
+	&js<
+		self.document.frmInteractive.txtResponse.value = '';
+	>
+
+	If ($IsObject(tResponse)) {
+		Do tResponse.Rewind()
+		While 'tResponse.AtEnd {
+			Set tValue = tResponse.Read(32767)
+			
+			&js<
+				self.document.frmInteractive.txtResponse.value = self.document.frmInteractive.txtResponse.value + #(..QuoteJS(tValue))#;
+			>
+		}
+		
+		Set tResponseSize = tResponse.Size
+	}
+	Else {
+		&js<
+			self.document.frmInteractive.txtResponse.value = self.document.frmInteractive.txtResponse.value + #(..QuoteJS(tResponse))#;
+		>
+		
+		Set tResponseSize = $Length(tResponse)
+	}
+	
+	Set tEnd = $ZHorolog
+	
+	&js<
+		alert('Request size:  #(tRequestSize)#\nResponse size:  #(tResponseSize)#\n-----\nTotal time (in seconds):  #(tEnd - tBegin)#');
+	>
+	
+	Quit
+</script>
+
+<script language="sql" name="qMessages">
+	Select ID,Name From Demo_HL7v3_TestHarness.MessageTemplate Where Type='Request' Order By Name
+</script>
+
+<body style="margin:0px; padding: 0px;" onresize="resizeHandler();">
+	<form name="frmInteractive">
+		<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td colspan="10">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td nowrap width="205" height="100" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: no-repeat; background-image: url("../images/logo-topl-intersystems.gif");'>
+							<nobr>&nbsp;
+								<span style="color: gray;">
+									<a target="_top" title="Go to the Test Harness test home page" class="buttonStyleON" href='../home.csp'>Home</a>
+									|
+									<a target="_top" title="Report the version of these utilities" class="buttonStyleON" href='interactive.csp' onClick="alert('Test Harness\nVersion 1.0');">About</a>
+								</span>
+							</nobr>
+						</td>
+						<td nowrap bgcolor="#FFFAE7" valign="top" align="left">
+							<div style="color: darkblue; margin-top:18px; font-weight: bold; font-size:11pt;">Test Harness Interactive Client</div>
+						</td>
+						<td nowrap width="308" height="78" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: repeat-y; background-image: url("../images/opposite-pic-intersys.jpg");'>&nbsp;</td>
+						<td width="2%" bgcolor="#388CCC">&nbsp;</td>
+						<td bgcolor="#388CCC" valign="bottom"></td>
+						<td bgcolor="#388CCC">&nbsp;</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+	
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 10pt;">
+				<tr>
+					<td colspan="6" bgcolor="#D36D00"><img src='../images/spacer.gif' width="100%" height="2" alt="-" border="0"></td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="center" nowrap style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;">
+						<div align="LEFT" class="Locator">&nbsp;
+							[<a target="_top" href="../home.csp">Home</a>]
+							&gt;
+							[<a target="_top" href="interactive.csp">Interactive Client Configuration</a>]
+						</div>
+					</td>
+					<td style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+	
+			<tr height="100%">
+				<td class="LayoutContentCol" width="80%" ><br>
+					<table width="98%" border="0" cellpadding="10" cellspacing="0">
+						<tr>
+							<td valign="top" width="22%">
+								<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+									<tr>
+										<th nowrap bgcolor="#05B868">Interactive Client Test&nbsp;
+											<br>
+											<img src="../images/spacer.gif" width="11" height="11" border="0">
+											<span class="MenuPaneSubtitle">Configure and Run Interactive Client Test&nbsp;</span>
+										</th>
+									</tr>
+									<tr>
+									<!-- Begin content -->
+										<table border="1" rows="6" cols="2" width="100%">
+											<tr title="Enter the name of the proxy class">
+												<td class="DetailValue" nowrap>Class Name</td>
+												<td class="DetailValue" nowrap>
+													<input type="text" name="txtClass" value="Demo.HL7v3.TestHarness.HL7v3SOAPInProxy" size="60">
+												</td>
+											</tr>
+											<tr title="Enter the method name to call">
+												<td class="DetailValue" nowrap>Method Name</td>
+												<td class="DetailValue" nowrap>
+													<input type="text" name="txtMethod" value="SendMessage" size="60">
+												</td>
+											</tr>
+											<tr title="Enter a request message">
+												<td class="DetailValue" nowrap>Request Message</td>
+												<td class="DetailValue" nowrap>
+													<textarea cols="125" name="txtRequest" rows="14"></textarea>
+													<br>
+													<select name="mnuMessageTypes">
+														<csp:while condition="qMessages.Next()">
+															<script language="cache" runat="server">
+																Set tMessageID		= qMessages.Data("ID")
+																Set tMessageName	= qMessages.Data("Name")
+															</script>
+															
+															<option value="#(tMessageID)#">#(tMessageName)#</option>
+														</csp:while>
+													</select>
+													<input class="AutoFormButton" type="button" name="btnLoadMessage" value="Load message" title="Load message into 'Request Message' field" onclick="loadMessage(self.document.frmInteractive.mnuMessageTypes.options[self.document.frmInteractive.mnuMessageTypes.selectedIndex].value);">
+													<input class="AutoFormButton" type="button" name="btnViewMessage" title="Open message in new window" value="View Message" onClick="viewMessage(self.document.frmInteractive.mnuMessageTypes.options[self.document.frmInteractive.mnuMessageTypes.selectedIndex].value);">
+													<input class="AutoFormButton" type="button" name="btnSendMessage" value="Send Message" onclick=#server(..sendMessage(self.document.frmInteractive.txtClass.value,self.document.frmInteractive.txtMethod.value,self.document.frmInteractive.txtRequest.value))#>&nbsp;
+											</tr>
+											<tr title="This field will contain a response, if any">
+												<td class="DetailValue" nowrap>Response Message</td>
+												<td class="DetailValue" nowrap>
+													<textarea cols="125" name="txtResponse" rows="14" title="This field will contain a response, if any"></textarea>
+												</td>
+											</tr>
+										</table>
+									<!-- End content -->
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+
+</html>

@@ -1,0 +1,219 @@
+<html>
+
+<head>
+	<title>Test Harness Message Management</title>
+
+	<link rel="stylesheet" type="text/css" href="../testharness.css" title="Standard Style">
+</head>
+
+<script language="JavaScript">
+	// invoke resize handler if present
+	function resizeHandler()
+	{
+		if (this.onResizeHandler) {
+			this.onResizeHandler();
+		}
+	}
+
+	// save message
+	function saveMessage(pMessageID)
+	{
+		var tName		= eval('self.document.frmMessage.txtName' + pMessageID + '.value');
+		var tType		= eval('self.document.frmMessage.mnuType' + pMessageID + '.value');
+		var tMessage	= eval('self.document.frmMessage.txtMessage' + pMessageID + '.value');
+		
+		#server(..saveMessage(pMessageID, tName, tType, tMessage))#;
+
+		return;
+	}
+
+	// delete message
+	function deleteMessage(pMessageID)
+	{
+		#server(..deleteMessage(pMessageID))#;
+
+		return;
+	}
+
+	// open new message dialog
+	function openNewMessageWindow() {
+		tWindow = window.open('newmessage.csp', 'NewMessage', 'height=600,width=1325,scrollbars=no,resizable=yes');
+	
+		return;
+	}
+</script>
+
+<script language="cache" method="saveMessage" arguments="pMessageID,pName,pType,pMessage" returntype="%Boolean">
+	If (##class(Demo.HL7v3.TestHarness.MessageTemplate).%ExistsId(pMessageID) = 1) {
+		Set tMessage = ##class(Demo.HL7v3.TestHarness.MessageTemplate).%OpenId(pMessageID)
+	}
+	Else {
+		&js<
+			alert('Message ID not found:  #(pMessageID)#');
+		>
+		
+		Quit 0
+	}
+
+	Set tMessage.Name	= pName
+	Set tMessage.Type	= pType
+	Do tMessage.Message.Clear()
+	Do tMessage.Message.Write(pMessage)
+
+	Set tStatus = tMessage.%Save()
+	If (tStatus = 1) {
+		&js<
+			alert('Message saved successfully, ID:  #(tMessage.%Id())#');
+		>
+	}
+	Else {
+		&js<
+			alert('ERROR:  Message not saved');
+		>
+	}
+	
+	Quit +tStatus
+</script>
+
+<script language="cache" method="deleteMessage" arguments="pMessageID" returntype="%Boolean">
+	Set tStatus = ##class(Demo.HL7v3.TestHarness.MessageTemplate).%DeleteId(pMessageID)
+	
+	If (tStatus = 1) {
+		&js<
+			alert('Message deleted successfully, ID:  #(pMessageID)#');
+			
+			self.document.location = 'message.csp';
+		>
+	}
+	
+	Else {
+		&js<
+			alert('ERROR:  Message NOT deleted:  #(pMessageID)#\n-----\nCheck referential integrity (delete will fail until no other object references this row)');
+		>
+	}
+
+	Quit +tStatus
+</script>
+
+<script language="sql" name="qMessageExtent">
+	Select ID From Demo_HL7v3_TestHarness.MessageTemplate Order By ID
+</script>
+
+<body style="margin:0px; padding: 0px;" onresize="resizeHandler();">
+	<form name="frmMessage" method="post" enctype="multipart/form-data" action="message.csp">
+		<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td colspan="10">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td nowrap width="205" height="100" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: no-repeat; background-image: url("../images/logo-topl-intersystems.gif");'>
+							<nobr>&nbsp;
+								<span style="color: gray;">
+									<a target="_top" title="Go to the Test Harness test home page" class="buttonStyleON" href='../home.csp'>Home</a>
+									|
+									<a target="_top" title="Report the version of these utilities" class="buttonStyleON" href='message.csp' onClick="alert('Test Harness\nVersion 1.0');">About</a>
+								</span>
+							</nobr>
+						</td>
+						<td nowrap bgcolor="#FFFAE7" valign="top" align="left">
+							<div style="color: darkblue; margin-top:18px; font-weight: bold; font-size:11pt;">Test Harness Message Management</div>
+						</td>
+						<td nowrap width="308" height="78" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: repeat-y; background-image: url("../images/opposite-pic-intersys.jpg");'>&nbsp;</td>
+						<td width="2%" bgcolor="#388CCC">&nbsp;</td>
+						<td bgcolor="#388CCC" valign="bottom"></td>
+						<td bgcolor="#388CCC">&nbsp;</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+	
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 10pt;">
+				<tr>
+					<td colspan="6" bgcolor="#D36D00"><img src='../images/spacer.gif' width="100%" height="2" alt="-" border="0"></td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="center" nowrap style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;">
+						<div align="LEFT" class="Locator">&nbsp;
+							[<a target="_top" href="../home.csp">Home</a>]
+							&gt;
+							[<a target="_top" href="message.csp">Message Management</a>]
+						</div>
+					</td>
+					<td style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+	
+			<tr height="100%">
+				<td class="LayoutContentCol" width="80%" ><br>
+					<table width="98%" border="0" cellpadding="10" cellspacing="0">
+						<tr>
+							<td valign="top" width="22%">
+								<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+									<tr>
+										<th nowrap bgcolor="#A097D6">Message Management&nbsp;
+											<br>
+											<img src="../images/spacer.gif" width="11" height="11" border="0">
+											<span class="MenuPaneSubtitle">Add/edit/delete Messages&nbsp;</span>
+										</th>
+									</tr>
+									<tr>
+									<!-- Begin content -->
+										<table class="DetailTable" border="1" cellpadding="5" cellspacing="0">
+											<csp:while condition="qMessageExtent.Next()" counter="tCounter">
+											<csp:if condition="tCounter = 1">
+											<tr>
+												<th nowrap align="left" title="Message ID">Message ID</th>
+												<th nowrap align="left" title="Message name -- Example: QUPA_IN101103">Message Name</th>
+												<th nowrap align="left" title="Message type ('request' or 'response')">Message Type</th>
+												<th nowrap align="left" title="Message content to use -- Example:  <response>OK</response>">Message Content</th>
+											</tr>
+											</csp:if>
+											
+											<script language="cache" runat="server">
+												Set tMessageID 		= qMessageExtent.Data("ID")
+												Set tMessageObject	= ##class(Demo.HL7v3.TestHarness.MessageTemplate).%OpenId(tMessageID)
+												Set tName			= tMessageObject.Name
+												Set tType			= tMessageObject.Type
+												Set tMessage		= tMessageObject.Message.Read(32767)
+											</script>
+											<tr>
+												<td valign="top" class="DetailValue" nowrap title="Message ID: #(tMessageID)#">#(tMessageID)#</td>
+												<td valign="top" class="DetailValue" nowrap title="Message name -- Example: QUPA_IN101103">
+													<input type="text" name="txtName#(tMessageID)#" value="#(tName)#">
+												</td>
+												<td valign="top" class="DetailValue" nowrap align="center" title="Message type ('request' or 'response')">
+													<select name="mnuType#(tMessageID)#">
+														<option value="Request" #($Case(tType="Request", 1:"selected", :""))#>Request</option>
+														<option value="Response" #($Case(tType="Response", 1:"selected", :""))#>Response</option>
+													</select>
+												</td>
+												<td valign="top" class="DetailValue" nowrap title="Message content to use -- Example:  <response>OK</response>">
+													<textarea name="txtMessage#(tMessageID)#" cols="100" rows="10">#(tMessage)#</textarea>
+													<br>
+													<input type="button" name="btnSaveMessage#(tMessageID)#" title="Save response map" value="Save Message" onClick="saveMessage(#(tMessageID)#);">
+													<input type="button" name="btnDeleteMessage#(tMessageID)#" title="Delete response map" value="Delete Message" onClick="deleteMessage(#(tMessageID)#);">
+												</td>
+											</tr>
+											</csp:while>
+										</table>
+										
+										<table border="0" cols="2">
+											<tr>
+												<td class="AutoFormButton">
+													<input class="AutoFormButton" type="button" name="btnNewMessage" value="New Message" onClick="openNewMessageWindow();">
+												</td>
+											</tr>
+										</table>
+									<!-- End content -->
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+
+</html>

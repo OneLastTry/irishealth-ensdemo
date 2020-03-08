@@ -1,0 +1,748 @@
+/* ---------  System Manager Portal Style ------------------- 
+
+Following are from the InterSystem's main web site, and
+slightly modified by Yan.
+
+------------------------------------------------------------- */
+p {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+}
+h1,Title {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+}
+h2 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+h3 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+	font-weight: bold;
+}
+h6 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: darkblue;
+}
+h4 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+}
+a:link {
+	color: 990000;
+}
+a:visited {
+	color: 990000;
+}
+a:hover {
+	color: D36d00;
+}
+a:active {
+	color: #5E99AA;
+}
+
+
+.newslinks {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+	font-style: normal;
+}
+.footerlinks {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+	color: #333333;
+}
+.cache-tagline {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	color: #384492;
+}
+.solfinder-menu {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #000000;
+	width: 180px;
+	background-color: #FFFAE7;
+}
+.ensemble-tagline {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	color: #006699;
+}
+.quote-text {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 15px;
+	color: #333333;
+	font-weight: normal;
+}
+.quotation-marks {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 21px;
+	color: #5E99AA;
+	font-weight: bold;
+	line-height: 14px;
+}
+.quote-name {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #333333;
+	text-align: right;
+}
+.quote-company {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #333333;
+	font-weight: bold;
+	text-transform: capitalize;
+	text-align: right;
+}
+.back-to-top {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+}
+A.buttonStyle
+{
+    COLOR: #000000;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 12px;
+    TEXT-DECORATION: none
+}
+A.buttonStyle:visited
+{
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.buttonStyle:hover
+{
+    COLOR: #384492
+}
+A.productBullets {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+	font-style: normal;
+	font-weight: normal;
+	color: #000000;
+	text-decoration: none;
+}
+A.productBullets:visited {
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.productBullets:hover {
+    COLOR: #666666}
+ul {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+	color: #000000;
+	list-style-type: square;
+	list-style-image:  url(images/dot-neutral.gif);
+}
+.run-inH-cache {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	font-variant: small-caps;
+	color: #664975;
+}
+.breadCrumbs
+{
+    COLOR: #333333;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 9px}
+A.breadCrumbsLink
+{
+    COLOR: #333333;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+    FONT-SIZE: 9px}
+A.breadCrumbsLink:visited
+{
+	COLOR: #333333;
+}
+A.breadCrumbsLink:hover
+{
+	COLOR: #5E99AA;
+}
+.run-inH-ensemble {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	font-variant: small-caps;
+	color: #266659;
+}
+ol {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+}
+A.SUB3buttonStyle
+{
+	COLOR: #000000;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	TEXT-DECORATION: none;
+	text-align: right;
+}
+A.SUB3buttonStyle:visited
+{
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.SUB3buttonStyle:hover
+{
+    COLOR: #384492
+}
+A.SUB4buttonStyle
+{
+	COLOR: #000000;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 10px;
+	TEXT-DECORATION: none;
+	text-align: right;
+}
+A.SUB4buttonStyle:visited
+{
+    COLOR: #000000;
+    TEXT-DECORATION: none
+}
+A.SUB4buttonStyle:hover
+{
+    COLOR: #384492
+}
+A.buttonStyleON
+{
+	COLOR: darkblue;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 12px;
+	TEXT-DECORATION: none;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+A.buttonStyleON:visited
+{
+	COLOR: darkblue;
+	TEXT-DECORATION: none;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+A.buttonStyleON:hover
+{
+	COLOR: red;
+	padding-left: 2px;
+	padding-right: 2px;
+    
+}
+
+/* ----------------------------------------------------------
+
+Following are based on csputils.css but modified by Yan, 
+Names are shared with Ensemble.
+
+------------------------------------------------------------- */
+/* layout styles */
+
+TABLE.LayoutMain {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+	
+TABLE.LayoutMain TR {
+	vertical-align: top;
+}
+
+TABLE.LayoutMain TD.LayoutMenuCol {
+	background: white;
+	border-right: 1px solid gray;
+	vertical-align: top;
+}
+
+TABLE.LayoutMain TD.LayoutContentCol {
+	padding-left: 20px;
+	vertical-align: top;
+}
+
+DIV.TitleText {
+	font-size: 1.4em;
+	font-family: "Lucida Sans Unicode" "Courier New";
+	font-weight: bold;
+	color: white;
+	width: 80%;
+}
+
+TD.text1		{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.9em; }
+
+DIV.text1:first-letter	{font-size: 1.4em;  }
+
+TD.text1:first-letter	{font-size: 1.4em;  }
+
+/* Menu styles */
+
+TABLE.Menu {
+	margin: 0px;
+	font: 1.0em Verdana, Arial, Helvetica, sans-serif;
+}
+
+
+DIV.MenuItem {
+}
+
+TD.MenuItem {
+	color: yellow;
+	background: #f2ce68;
+	width: 100%;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	padding: 5px;
+}
+
+TD.MenuItem A.MenuItem {
+	color: black;
+	width: 100%;
+	padding: 0px;
+	text-decoration: none;
+}
+
+TD.MenuItem A:hover.MenuItem  {
+	color: black;
+	background: #FFF0B0;
+	width: 100%;
+	padding: 0px;
+	text-decoration: none;
+}
+
+TD.MenuItemCurr {
+	color: yellow;
+	background: #f7e8aa;
+	width: 100%;
+	border-bottom: 1px solid white;
+	padding: 5px;
+	text-decoration: none;
+
+}
+
+
+TD.MenuItemHi {
+	color: blue;
+	background: #f7e8aa;
+	width: 100%;
+	border-bottom: 1px solid white;
+	padding: 5px;
+}
+
+TD.MenuItemHi A.MenuItem {
+	color: blue;
+	width: 100%;
+	padding: 0px;
+	text-decoration: none;
+}
+
+TD.MenuItemCurrHi {
+	color: blue;
+	background: #FFF0B0;
+	width: 100%;
+	border-bottom: 1px solid #808050;
+	padding: 5px;
+}
+
+/* Detail pane table styles */
+
+/* MLR - Begin */
+table.MenuPaneTable {
+	background: #fff8e7;
+}
+table.MenuPaneTable th {
+	font-size: 1.0em;
+	font-weight: bold;
+	text-align: left;
+	padding: 5px;
+	font-variant: small-caps;
+	border: 1px darkblue solid;
+}
+table.MenuPaneTable th {
+	font-size: 1.0em;
+	text-align: left;
+	padding: 5px;
+}
+.MenuPaneItem {
+	font-size: 0.9em;
+	font-weight: bold;
+	text-align: left;
+	padding: 2px;
+	padding-top: 4px;
+	border: 1px #fff8e7 solid;
+}
+.MenuPaneItem a {
+	text-decoration: none;
+}
+.MenuPaneItem a:link {
+	color: darkblue;
+}
+.MenuPaneItem a:visited {
+	color: darkblue;
+}
+.MenuPaneItem a:active {
+	color: darkblue;
+}
+.MenuPaneItemHilight {
+	font-size: 0.9em;
+	font-weight: bold;
+	text-align: left;
+	padding: 2px;
+	padding-top: 4px;
+	border: 1px darkblue dotted;
+}
+.MenuPaneItemHilight a {
+	text-decoration: none;
+}
+.MenuPaneItemHilight a:link {
+	color: red;
+}
+.MenuPaneItemHilight a:visited {
+	color: red;
+}
+.MenuPaneItemHilight a:active {
+	color: red;
+}
+.MenuPaneItemDisabled {
+	font-weight: bold;
+	color: gray;
+	text-align: left;
+	padding: 2px;
+	padding-top: 4px;
+	border: 1px #fff8e7 solid;
+}
+.MenuPaneHelpBox {
+	font-size: 0.8em;
+	border-top: 1px darkblue solid;
+	background: #EEFFFF;
+	line-height: 120%;
+	text-align: left;
+	padding: 4px;
+	filter:
+		progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CCDDFF', EndColorStr='#FFFFFF');
+}
+.MenuPaneHelpBox b {
+	color: darkblue;
+}
+.MenuPaneHelpBoxOff {
+	font-size: 0.8em;
+	border: 1px white solid;
+	line-height: 120%;
+	padding: 4px;
+}
+span.MenuPaneSubtitle {
+	font-size: 0.8em;
+	font-weight: normal;
+	font-variant: normal;
+}
+/* MLR - End */
+
+DIV.DetailCommand { font-size: 0.8em; 
+		margin-left: 0px;
+		margin-right: 20px;
+		margin-top: 0px;
+		margin-bottom: 5px;
+		padding-bottom: 2px;
+		border-top: 1px gray solid;
+		border-bottom: 1px gray solid;
+		width: 100%;
+		background: #FFFAE7;
+	xfilter:
+		progid:DXImageTransform.Microsoft.Gradient(GradientType=1, StartColorStr='#FFFAE7', EndColorStr='#388CCC');
+		}
+
+A.DetailCommand { 
+	text-decoration: none; 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: blue;
+	font-weight: bold;
+	} 
+	
+A.DetailCommand:visited {
+	color: blue;
+}
+	
+A.DetailCommand:hover {
+	color: red;
+}
+
+/* table filter styles */
+
+.FilterTable {
+	background: #388CCC;
+	margin-left:20px;
+	margin-bottom:5px;
+	border: 1px solid darkblue;
+	filter:
+		progid:DXImageTransform.Microsoft.Gradient(GradientType=1, StartColorStr='#FFFAE7', EndColorStr='#388CCC');
+	
+}
+
+.FilterLabel {
+	color: black;
+	font-size: 0.7em;
+}
+
+.FilterMsg {
+	color: black;
+	font-size: 0.7em;
+}
+
+.FilterInput {
+	color: blue;
+	font-size: 0.7em;
+}
+
+
+.PagingButtons {
+	color: blue;
+	background: white;
+	border: 1px black solid;
+	padding: 1px;
+	font-size: 0.7em;
+}
+
+.PageLink {
+	color: black;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.PageLinkDisabled {
+	color: #B0B0FF;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.PageLinkCurr {
+	background: yellow;
+	color: blue;
+	font-weight: bold;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-left: 1px black solid;
+	border-right: 1px black solid;
+}
+
+
+/* table details */
+
+TABLE.DetailTable	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	width: 25%;
+	margin-left: 20px; margin-right: 20px;
+}
+TABLE.DetailTable TH { 
+	font-weight: bold;		
+	background:#333399; color: white;
+	text-align: center;
+}
+TABLE.DetailTable TH.SortCol { 
+	font-weight: bold;		
+	background: #333399; color: red;
+	text-align: center;
+	}
+
+TABLE.DetailTable TH A { 
+	color: yellow; font-weight: normal; text-decoration: none;
+	}
+
+TABLE.DetailTable TH.SortCol A { 
+	color: yellow; font-weight: bold; text-decoration: none;
+	}
+
+TABLE.DetailTable TR.OddRow { background: white; }
+
+TABLE.DetailTable TR.EvenRow { background: #eeeeee; }
+
+
+TD.DetailValue A {
+	width: 100%;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+TD.DetailValue DIV {
+	width: 100%;
+}
+
+TD.DetailLabel
+		{ 
+	background: #EEDDFF;
+	font-weight: bold;
+}
+		
+TD.DetailMore
+		{	
+		font-style: italic; 
+		color: gray;
+		border-left: gray solid 1px; border-bottom: black solid 1px; 
+		padding-left: 3px; 
+		padding-right: 5px; 
+}
+
+/* AutoForm styles */
+/* AutoForm: Form */
+
+TABLE.AutoForm	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border: black solid 1px; font-size: 0.8em;
+					background: #DDEEFF;
+					width: 30%;
+					margin-left: 20px; margin-right: 20px;
+				 }
+
+TD.AutoFormCaption {
+			text-align: right;
+		}
+
+
+TD.AutoFormButton {
+		padding-top: 10px;
+		text-align: right;
+		}
+
+INPUT.AutoFormLookupButton {
+			font-weight: bold;
+			font-size: 0.6em;
+		}
+
+
+/* AutoForm: Table */
+
+TABLE.AutoFormTable {
+		border: black solid 1px; font-size: 0.8em;
+		background: white;
+		margin-left: 20px; margin-right: 20px;
+		width: 10;
+	}
+
+TR.AutoFormTableTitle {
+		background: blue;
+		padding-left: 4px; padding-right: 4px;
+	}
+
+TR.AutoFormTableTitle TH {
+		color: yellow;
+		font-weight: bold;
+		text-align: left;
+		border-bottom: black solid 1px;
+		border-right: gray solid 1px;
+		padding: 3px;
+	}
+
+TD.AutoFormTableExpandor {
+		background: #D0D0FF;
+		font-weight: bold;
+		border-bottom: gray solid 1px;
+		padding: 3px;
+	}
+
+TD.AutoFormTableCaption {
+		background: #D0D0FF;
+		font-weight: bold;
+		border-bottom: gray solid 1px;
+		border-right: gray solid 1px;
+		padding: 3px;
+	}
+TD.NumericCaption {
+		background: #D0D0FF;
+		border-bottom: gray solid 1px;
+		border-right: gray solid 1px;
+		padding: 3px;
+		text-align: right;
+	}
+TD.AutoFormTableValue {
+		background: #FFFFFF;
+		border-bottom: gray solid 1px;
+		border-right: gray solid 1px;
+		padding: 3px;
+	}
+
+/* other styles */
+
+A.LastUpdate {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.7em;
+	color: blue;
+	padding: 2px;
+	background: white;
+	border: 1px black solid;
+}
+A.LastUpdate:hover
+{
+	color: #5E99AA;
+	
+}
+
+DIV.ErrorBox {
+	margin: 20px;
+	border: 1px black solid;
+	color: red;
+	font-family: courier new;
+	background: white;
+}
+
+DIV.Locator {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	font-weight: bold;
+	color: darkblue;
+	text-decoration: none;
+}
+
+DIV.Locator A {
+	color: darkblue;
+	text-decoration: none;
+	padding-right: 1px;
+	padding-left: 1px;
+}
+
+DIV.Locator A:visited {
+	color: darkblue;
+}
+
+DIV.Locator A:hover {
+	color: red;
+	background: #FFFAE7;
+}
+
+/* ----------------------------------------------------------
+
+Following are new to System Management Portal 
+and unshared with Ensemble.
+
+------------------------------------------------------------- */
+
+body {
+  margin:0;
+  padding:0;
+  font:small "Trebuchet MS",Verdana,Arial,Sans-serif;
+}
+.wizardlabel {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	color: #384492;
+	text-align: right;
+}
+.wizardltlabel {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	color: #384492;
+	text-align: left;
+}
+

@@ -1,0 +1,295 @@
+<html>
+
+<head>
+	<title>Test Harness Interactive Server Queue</title>
+
+	<link rel="stylesheet" type="text/css" href="../testharness.css" title="Standard Style">
+</head>
+
+<style>
+	.MenuPaneItem {
+		font-size: 0.9em;
+		font-weight: bold;
+		text-align: center;
+		padding-top: 4px;
+		border: 1px #fff8e7 solid;
+	}
+	.MenuPaneItem a {
+		font-size: 1em;
+		text-decoration: none;
+		color: darkblue;
+	}
+	.MenuPaneItemHilight a {
+		text-decoration: none;
+		color: red;
+	}
+</style>
+
+<script language="JavaScript">
+	// invoke resize handler if present
+	function resizeHandler() {
+		if (this.onResizeHandler) {
+			this.onResizeHandler();
+		}
+	}
+
+	// send message
+	function sendMessage(pMessageID, pResponse)
+	{
+		#server(..sendMessage(pMessageID, pResponse))#;
+
+		return;
+	}
+
+	// delete single message
+	function deleteMessage(pMessageID)
+	{
+		#server(..deleteMessage(pMessageID))#;
+
+		return;
+	}
+
+	// purge all messages in queue
+	function purgeQueue()
+	{
+		#server(..purgeQueue())#;
+
+		return;
+	}
+
+	// load message
+	function loadMessage(pMessageID, pTargetID) {
+		#server(..loadMessage(pMessageID, pTargetID))#;
+	
+		return;
+	}
+</script>
+
+<script language="cache" method="loadMessage" arguments="pMessageID:%Integer, pTargetID:%Integer">
+	Set tMessage = ##class(Demo.HL7v3.TestHarness.MessageTemplate).%OpenId(pMessageID)
+	
+	Set tClearString = "self.document.frmInteractive.txtResponse" _ pTargetID _ ".value = '';"
+	&js<
+		#(tClearString)#
+	>
+
+	While 'tMessage.Message.AtEnd {
+		Set tValue = tMessage.Message.Read(32767)
+		Set tConcatenateString = "self.document.frmInteractive.txtResponse" _ pTargetID _ ".value = self.document.frmInteractive.txtResponse" _ pTargetID _ ".value + " _ ..QuoteJS(tValue) _ ";"
+		&js<
+			#(tConcatenateString)#
+		>
+	}
+	
+	Quit
+</script>
+
+<script language="cache" method="sendMessage" arguments="pMessageID,pResponse" returntype="%Boolean">
+	If (##class(Demo.HL7v3.TestHarness.MessageQueue).%ExistsId(pMessageID) = 0) {
+		&js<
+			alert('ERROR:  Request ID not found:  #(pMessageID)#');
+		>
+		
+		Quit 0
+	}
+
+	Set tMessage = ##class(Demo.HL7v3.TestHarness.MessageQueue).%OpenId(pMessageID)
+	Set tMessage.Status	= "underway"
+	Do tMessage.Response.Write(pResponse)
+
+	Set tStatus = tMessage.%Save()
+	If (tStatus = 1) {
+		&js<
+			self.document.location = 'Interactive.csp';
+		>
+	}
+	Else {
+		&js<
+			alert('ERROR:  Response NOT sent:  #(pMessageID)#');
+		>
+	}
+	
+	Quit +tStatus
+</script>
+
+<script language="cache" method="deleteMessage" arguments="pMessageID" returntype="%Boolean">
+	&sql(
+		Delete
+		From	Demo_HL7v3_TestHarness.MessageQueue
+		Where	ID = :pMessageID
+	)
+	
+	If ('SQLCODE) {
+		&js<
+			alert('Request message deleted from queue, ID:  #(pMessageID)#');
+			
+			self.document.location = 'Interactive.csp';
+		>
+
+		Quit 1
+	}
+	
+	Else {
+		&js<
+			alert('ERROR:  Request message NOT deleted:  #(pMessageID)#');
+		>
+
+		Quit 0
+	}
+</script>
+
+<script language="cache" method="purgeQueue" returntype="%Boolean">
+	&sql(
+		Delete
+		From	Demo_HL7v3_TestHarness.MessageQueue
+	)
+	
+	&js<
+		alert('All messages purged');
+			
+		self.document.location = 'Interactive.csp';
+	>
+
+	Quit 1
+</script>
+
+<script language="sql" name="qQueuedRequests">
+	Select ID From Demo_HL7v3_TestHarness.MessageQueue Where Status='queued' Order By DateTimeReceived
+</script>
+
+<script language="sql" name="qKnownResponses">
+	Select ID,Name From Demo_HL7v3_TestHarness.MessageTemplate Where Type='Response' Order By ID
+</script>
+
+<body style="margin:0px; padding: 0px;" onresize="resizeHandler();">
+	<form name="frmInteractive" method="post" enctype="multipart/form-data" action="Interactive.csp">
+		<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td colspan="10">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td nowrap width="205" height="100" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: no-repeat; background-image: url("../images/logo-topl-intersystems.gif");'>
+							<nobr>&nbsp;
+								<span style="color: gray;">
+									<a target="_top" title="Go to the Test Harness test home page" class="buttonStyleON" href='../home.csp'>Home</a>
+									|
+									<a target="_top" title="Report the version of these utilities" class="buttonStyleON" href='Interactive.csp' onClick="alert('Test Harness\nVersion 1.0');">About</a>
+								</span>
+							</nobr>
+						</td>
+						<td nowrap bgcolor="#FFFAE7" valign="top" align="left">
+							<div style="color: darkblue; margin-top:18px; font-weight: bold; font-size:11pt;">Test Harness Interactive Server</div>
+						</td>
+						<td nowrap width="308" height="78" bgcolor="#FFFAE7" valign="bottom" align="left" style='background-repeat: repeat-y; background-image: url("../images/opposite-pic-intersys.jpg");'>&nbsp;</td>
+						<td width="2%" bgcolor="#388CCC">&nbsp;</td>
+						<td bgcolor="#388CCC" valign="bottom"></td>
+						<td bgcolor="#388CCC">&nbsp;</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+	
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 10pt;">
+				<tr>
+					<td colspan="6" bgcolor="#D36D00"><img src='../images/spacer.gif' width="100%" height="2" alt="-" border="0"></td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="center" nowrap style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;">
+						<div align="LEFT" class="Locator">&nbsp;
+							[<a target="_top" href="../home.csp">Home</a>]
+							&gt;
+							[<a target="_top" href="Interactive.csp">Interactive Queue Management</a>]
+						</div>
+					</td>
+					<td style="background: #A0B088; border-bottom: 1px darkblue solid; padding-bottom: 1px;" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+	
+			<tr height="100%">
+				<td class="LayoutContentCol" width="80%" ><br>
+					<table width="98%" border="0" cellpadding="10" cellspacing="0">
+						<tr>
+							<td valign="top" width="22%">
+								<table class="MenuPaneTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size: 14pt;">
+									<tr>
+										<th nowrap bgcolor="#F9C345">Interactive Queue Management&nbsp;
+											<br>
+											<img src="../images/spacer.gif" width="11" height="11" border="0">
+											<span class="MenuPaneSubtitle">Server Message Queue&nbsp;</span>
+										</th>
+									</tr>
+									<tr>
+									<!-- Begin content -->
+										<table class="DetailTable" border="1" cellpadding="5" cellspacing="0">
+											<csp:while condition="qQueuedRequests.Next()" counter="tCounter">
+											<csp:if condition="tCounter = 1">
+											<tr>
+												<th nowrap align="left" title="Date/Time request entered queue">Date/Time Entered Queue</th>
+												<th nowrap align="left" title="Queued message's name">Request Name</th>
+												<th nowrap align="left" title="Response details">Response Details</th>
+												<th nowrap align="left" title="Action to take">Actions</th>
+											</tr>
+											</csp:if>
+											
+											<script language="cache" runat="server">
+												Set tRequestID 			= qQueuedRequests.Data("ID")
+												Set tRequestObject		= ##class(Demo.HL7v3.TestHarness.MessageQueue).%OpenId(tRequestID)
+												Set tRequestDateTime	= tRequestObject.DateTimeReceived
+												Set tRequestName		= tRequestObject.RequestName
+											</script>
+											<tr>
+												<td class="MenuPaneItem" valign="top" align="center" class="DetailValue" nowrap title="Date/Time request entered queue">#(tRequestDateTime)#</td>
+												<td class="MenuPaneItem" valign="top" align="center" nowrap title="Queued message's name">
+													#(tRequestName)#
+												</td>
+												<td valign="top" class="DetailValue" align="left" nowrap title="Enter a response -- Example:  <gotit>1</gotit>">
+													<textarea name="txtResponse#(tCounter)#" cols="88" rows="5"></textarea>
+													<br>
+													Known Response Types:
+													<select name="mnuResponses#(tRequestID)#">
+														<csp:while condition="qKnownResponses.Next()">
+															<script language="cache" runat="server">
+																Set tMessageID		= qKnownResponses.Data("ID")
+																Set tMessageName	= qKnownResponses.Data("Name")
+															</script>
+															
+															<option value="#(tMessageID)#">#(tMessageName)#</option>
+														</csp:while>
+														<script language="cache" runat="server">
+															Do qKnownResponses.Close()
+															Do qKnownResponses.Execute()
+														</script>
+													</select>
+													<input class="AutoFormButton" type="button" name="btnLoadMessage#(tRequestID)#" value="Load Response" title="Load message into 'Response Message' field" onclick="loadMessage(self.document.frmInteractive.mnuResponses#(tRequestID)#.options[self.document.frmInteractive.mnuResponses#(tRequestID)#.selectedIndex].value, #(tCounter)#);">
+													<input class="AutoFormButton" type="button" name="btnSendMessage#(tRequestID)#" title="Send response immediately" value="Send Response" onClick="sendMessage(#(tRequestID)#, self.document.frmInteractive.txtResponse#(tCounter)#.value);">
+												</td>
+												<td valign="top" class="DetailValue" align="center" nowrap title="Action to take">
+													<input class="AutoFormButton" type="button" name="btnDeleteMessage#(tRequestID)#" title="Delete response immediately" value="Delete From Queue" onClick="deleteMessage(#(tRequestID)#);">
+												</td>
+											</tr>
+											</csp:while>
+										</table>
+										
+										<table border="0" cols="2">
+											<tr>
+												<td class="AutoFormButton">
+													<input class="AutoFormButton" type="button" name="btnPurgeQueue" value="Purge All Messages" onClick="purgeQueue();">
+												</td>
+												<td class="AutoFormButton">
+													<input class="AutoFormButton" type="button" name="btnRefresh" value="Refresh Display" onClick="self.document.location='Interactive.csp';">
+												</td>
+											</tr>
+										</table>
+									<!-- End content -->
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+
+</html>

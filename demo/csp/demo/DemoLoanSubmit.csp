@@ -1,0 +1,31 @@
+<html>
+<head>
+<LINK REL="stylesheet" TYPE="text/css" HREF="csputils.css" TITLE="Standard Style" >
+</head>
+<body>
+<h1><csp:text TextId="FindRate" Domain="Ensemble">Find Rate</csp:text></h1>
+<div align="center" Class="Text1" textId = "DemoThank" Domain="Ensemble">
+Thank you for applying.<hr>
+</div>
+<div align="center" class="Text">
+<script language=Cache runat=server>
+	Set tSC=$$$OK
+	do {
+		Set tSC=##class(Ens.Director).CreateBusinessService("Demo.Loan.FindRateCSPService",.tService)
+		If ($$$ISERR(tSC)) Quit
+		Set tSC=tService.ProcessInput(%request,.output)
+		If ($$$ISERR(tSC)) Quit
+		If $IsObject($G(output)) Write output.StringValue
+	} while (0)
+	If ($$$ISERR(tSC)) {
+		// Error: assume system is not running
+		Write $$FormatMessage^%occMessages(%response.Language,"Ensemble","msgDemo1","The FindRate system is currently not accepting requests."),"<br>"
+		Write $$FormatMessage^%occMessages(%response.Language,"Ensemble","TryAgain","Please try again later.")
+	}	
+</script>
+</div>
+
+<a href="DemoLoanForm.csp"><div align="center" class="Text" TextId="btnBack" Domain="Ensemble">Back</div></a>
+
+</body>
+</html>

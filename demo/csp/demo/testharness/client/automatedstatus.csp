@@ -1,0 +1,158 @@
+<html>
+
+<head>
+	<title>Test Harness Automated Status</title>
+
+	<csp:if condition='$Data(^Demo.HL7v3.TestHarness.Status("Client"))'>
+		<meta http-equiv="refresh" content="1;url=automatedstatus.csp">
+	</csp:if>
+
+	<link rel="stylesheet" type="text/css" href="../testharness.css" title="Standard Style">
+</head>
+
+<style type="text/css">
+.oddrow {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 1.0em;
+	color: black;
+	background-color:White;
+	text-align: center;
+	font-weight: bold;
+	vertical-align:middle;
+}
+
+.evenrow {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 1.0em;
+	color: black;
+	background-color:#EEEEEE;
+	text-align: center;
+	font-weight: bold;
+	vertical-align:middle;
+}
+
+.caption {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 1.0em;
+	color: black;
+	text-align: center;
+	font-weight: bold;
+}
+</style>
+
+<script language="javascript">
+	function stopSelectedInterface(pMessageName, pInterfaceID) {
+		#server(..StopInterface(pMessageName, pInterfaceID))#;
+				
+		alert('Stopped the following interface:  ' + pMessageName + ', interface #' + pInterfaceID);
+
+		return;
+	}
+	
+	function stopAllInterfaces() {
+		#server(..StopAllInterfaces())#;
+		
+		alert('Stopped all interfaces');
+
+		return;
+	}
+</script>
+
+<script language="cache" method="StopInterface" arguments="pMessageName:%String,pInterfaceID:%String">
+	Set tStatus = ##class(Demo.HL7v3.TestHarness.Utils).ClearInterfaceInfo(pMessageName, pInterfaceID)
+</script>
+
+<script language="cache" method="StopAllInterfaces">
+	Set tStatus = ##class(Demo.HL7v3.TestHarness.Utils).ClearAllInterfaceInfo()
+</script>
+
+<script language="cache" runat="server">
+	If $Get(%session.Data("startTime")) = "" Set %session.Data("startTime") = $ZHorolog
+</script>
+
+<body style="margin:0px; padding: 0px;" onresize="resizeHandler();">
+	<form name="frmAutomatedClientStatus">
+		<table border="0" class="LayoutMain" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="LayoutContentCol" width="80%"><br>
+					<div class="Text1">Automated Client Test Status (<i>as of #($ZDateTime($Horolog, 3))#)</i>:</div><br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<csp:if condition='$Data(^Demo.HL7v3.TestHarness.Status("Client"))'>
+						<table class="AutoForm">
+							<tr class="AutoForm">
+								<td class="caption" nowrap><u>Message Name</u></td>
+								<td class="caption" nowrap><u>Interface ID</u></td>
+								<td class="caption" nowrap><u>Date/Time Started</u></td>
+								<td class="caption" nowrap><u>Total Requests</u></td>
+								<td class="caption" nowrap><u>Delay</u></td>
+								<td class="caption" nowrap><u>Requests Processed</u></td>
+								<td class="caption" nowrap><u>Responses Processed</u></td>
+							</tr>
+							<tr>
+								<td colspan="8"><hr noshade size="1"></td>
+							</tr>
+							<script language="cache" runat="server">
+								Set tMessageID = 0
+							
+								Set tMessageName = $Order(^Demo.HL7v3.TestHarness.Status("Client", ""))
+								While (tMessageName '= "") {
+									Set tMessageID		= tMessageID + 1
+									Set tInterfaceID	= $Order(^Demo.HL7v3.TestHarness.Status("Client", tMessageName, ""))
+									
+									While (tInterfaceID '= "") {
+										Set tTotalRequests		= $Get(^Demo.HL7v3.TestHarness.Status("Client", tMessageName, tInterfaceID, "Requests"), 0)
+										Set tTotalRequestBytes	= $Get(^Demo.HL7v3.TestHarness.Status("Client", tMessageName, tInterfaceID, "Requests", "Total Bytes"), 0)
+										Set tTotalResponses		= $Get(^Demo.HL7v3.TestHarness.Status("Client", tMessageName, tInterfaceID, "Responses"), 0)
+										Set tTotalResponseBytes	= $Get(^Demo.HL7v3.TestHarness.Status("Client", tMessageName, tInterfaceID, "Responses", "Total Bytes"), 0)
+										Set tInfo				= $Get(^Demo.HL7v3.TestHarness.Status("Client", tMessageName, tInterfaceID, "Info"))
+										Set tDateTime			= $Piece(tInfo, "^", 1)
+										Set tMessageCount		= $Piece(tInfo, "^", 2)
+										Set tHang				= $Piece(tInfo, "^", 3)
+										Set tStyle				= $Case(tMessageID # 2, 1:"oddrow", :"evenrow")
+										
+										&html<
+											<tr>
+												<td class="#(tStyle)#" nowrap>#(tMessageName)#</td>
+												<td class="#(tStyle)#" nowrap>#(tInterfaceID)#</td>
+												<td class="#(tStyle)#" nowrap>#(tDateTime)#</td>
+												<td class="#(tStyle)#" nowrap>#(tMessageCount)#</td>
+												<td class="#(tStyle)#" nowrap>#(tHang)#</td>
+												<td class="#(tStyle)#" nowrap>#(tTotalRequests)# / #($FNumber(tTotalRequestBytes, ","))# Bytes</td>
+												<td class="#(tStyle)#" nowrap>#(tTotalResponses)# / #($FNumber(tTotalResponseBytes, ","))# Bytes</td>
+												<td><input type="button" name="btnStopInterface" value="Stop" onClick="stopSelectedInterface('#(tMessageName)#', '#(tInterfaceID)#');"></td>
+											</tr>
+										>
+										
+										Set tInterfaceID = $Order(^Demo.HL7v3.TestHarness.Status("Client", tMessageName, tInterfaceID))
+									}
+									
+									Set tMessageName = $Order(^Demo.HL7v3.TestHarness.Status("Client", tMessageName))
+								}
+							</script>
+							<tr>
+								<td colspan="2" nowrap align="right">
+									<input type="button" name="btnStopAll" value="Stop All Interfaces" onClick="stopAllInterfaces();">
+								</td>
+							</tr>
+						</table>
+					<csp:else>
+						<table class="AutoForm">
+							<tr>
+								<td class="caption" nowrap>All Messages Sent -- Elapsed Time (in Seconds):  #($ZHorolog - $Get(%session.Data("startTime")))#</td>
+								</td>
+							</tr>
+							<script language="cache" runat="server">
+								Kill %session.Data("startTime")
+							</script>
+						</table>
+					</csp:if>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+
+</html>
