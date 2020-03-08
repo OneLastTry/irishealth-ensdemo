@@ -28,6 +28,7 @@ docker-compose up -d
 ```
 
 You can now access the manager portal through http://localhost:9092/csp/sys/%25CSP.Portal.Home.zen
+
 **Username:** SuperUser
 **Password:** SYS
 
