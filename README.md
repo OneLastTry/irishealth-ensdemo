@@ -29,13 +29,11 @@ docker-compose up -d
 
 You can now access the manager portal through http://localhost:9092/csp/sys/%25CSP.Portal.Home.zen
 
-**Username:** SuperUser
-**Password:** SYS
-
-**SuperServer port:** 9091
-**Web port:** 9092
-
-**Namespace:** ENSDEMO
+- **Username:** SuperUser
+- **Password:** SYS
+- **SuperServer port:** 9091
+- **Web port:** 9092
+- **Namespace:** ENSDEMO
 
 To start a terminal session execute:
 
