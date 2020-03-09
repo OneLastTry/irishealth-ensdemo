@@ -40,6 +40,8 @@ You can now access the manager portal through http://localhost:9092/csp/sys/%25C
 - **Web port:** 9092
 - **Namespace:** ENSDEMO
 
+![ensdemo](https://openexchange.intersystems.com/mp/img/packages/468/screenshots/zhnwycjrflt4q7gttwsidcntxk.png)
+
 To start a terminal session execute:
 
 ```bash
