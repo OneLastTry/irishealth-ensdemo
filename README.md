@@ -24,7 +24,7 @@ docker-compose build
 
 ## Run your Container
 
-After building the image you can either simply execut below and you be up and running 🚀:
+After building the image you can either simply execute below and you be up and running 🚀:
 
 *-d will run the container detached of your command line session*
 
