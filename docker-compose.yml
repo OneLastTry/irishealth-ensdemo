@@ -18,9 +18,3 @@ services:
     - type: bind
       source: ./shared
       target: /shared
-    - type: bind
-      source: ./durable
-      target: /dur
-
-    environment:
-      - ISC_DATA_DIRECTORY=/dur/db/iris_conf.d

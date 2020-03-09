@@ -18,9 +18,15 @@ RUN apt-get update && \
 
 ENV user "irisowner"
 USER irisowner
-ADD ./Installer.cls /tmp/Installer.cls
-ADD ./demo/cls /tmp/demo/cls
-ADD ./scripts/irissession.sh /tmp/irissession.sh
+COPY ./Installer.cls /tmp/Installer.cls
+COPY ./demo/cls /tmp/demo/cls
+COPY ./scripts/irissession.sh /tmp/irissession.sh
+USER root
+RUN chmod 775 /tmp/irissession.sh
+RUN chmod +x /tmp/irissession.sh
+RUN chown irisowner:irisuser /tmp/irissession.sh
+RUN sed -i -e 's/\r$//' /tmp/irissession.sh
+USER irisowner
 COPY ./demo/csp /usr/irissys/csp/healthshare/ensdemo/
 RUN echo "$IRIS_PASSWORD" >> /tmp/pwd.isc && /usr/irissys/dev/Container/changePassword.sh /tmp/pwd.isc
 
