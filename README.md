@@ -54,6 +54,8 @@ docker exec -it ensdemo /bin/bash
 
 Using [InterSystems ObjectScript](https://marketplace.visualstudio.com/items?itemName=daimor.vscode-objectscript) Visual Studio Code extension, you can access the code straight from _vscode_
 
+![vscode](https://openexchange.intersystems.com/mp/img/packages/468/screenshots/bgirfnblz2zym4zi2q92lnxkmji.png)
+
 ## Stop your Container
 
 ```bash
