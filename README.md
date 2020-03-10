@@ -14,7 +14,7 @@ Clone the repository to your desired directory
 git clone https://github.com/OneLastTry/irishealth-ensdemo.git
 ```
 
-Once the repository is a clone from command line go to the directory and execute:
+Once the repository is cloned, execute:
 
 **Always make sure you are inside the main directory to execute docker-compose commands.**
 
@@ -24,7 +24,7 @@ docker-compose build
 
 ## Run your Container
 
-After building the image you can either simply execute below and you be up and running 🚀:
+After building the image you can simply execute below and you be up and running 🚀:
 
 *-d will run the container detached of your command line session*
 
