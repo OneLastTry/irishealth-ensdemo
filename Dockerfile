@@ -10,12 +10,12 @@ ENV IRIS_PROJECT="/src/"
 ENV IRIS_INSTALLER="/tmp/Installer.cls"
 
 # setting the date of the image. modify it as required
-ENV TZ="Asia/Dubai"
-USER root
-RUN apt-get update && \
-    apt-get install -y tzdata && \
-    echo $TZ > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata
+#ENV TZ="Asia/Dubai"
+#USER root
+#RUN apt-get update && \
+#    apt-get install -y tzdata && \
+#    echo $TZ > /etc/timezone && \
+#    dpkg-reconfigure -f noninteractive tzdata
 
 ENV user "irisowner"
 USER irisowner
