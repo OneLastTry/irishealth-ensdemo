@@ -1,4 +1,5 @@
-ARG IMAGE=store/intersystems/irishealth-community:2019.4.0.383.0
+#ARG IMAGE=store/intersystems/irishealth-community:2019.4.0.383.0
+ARG IMAGE=store/intersystems/irishealth-community:2020.1.0.202.0
 FROM $IMAGE
 
 LABEL maintainer="Renan Lourenco <renan.lourenco@intersystems.com>"
