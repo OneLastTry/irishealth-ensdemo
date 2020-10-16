@@ -1,6 +1,7 @@
 #ARG IMAGE=store/intersystems/irishealth-community:2019.4.0.383.0
 #ARG IMAGE=store/intersystems/irishealth-community:2020.1.0.202.0
 ARG IMAGE=store/intersystems/irishealth-community:2020.2.0.211.0
+ARG IMAGE=intersystemsdc/irishealth-community:2020.3.0.200.0-zpm
 FROM $IMAGE
 
 LABEL maintainer="Renan Lourenco <renan.lourenco@intersystems.com>"
@@ -19,25 +20,18 @@ ENV IRIS_INSTALLER="/tmp/Installer.cls"
 #    dpkg-reconfigure -f noninteractive tzdata
 
 ENV user "irisowner"
-USER irisowner
-COPY ./Installer.cls /tmp/Installer.cls
-COPY ./demo/cls /tmp/demo/cls
-COPY ./scripts/irissession.sh /tmp/irissession.sh
 USER root
-RUN chmod 775 /tmp/irissession.sh
-RUN chmod +x /tmp/irissession.sh
-RUN chown irisowner:irisuser /tmp/irissession.sh
-RUN sed -i -e 's/\r$//' /tmp/irissession.sh
-USER irisowner
-COPY ./demo/csp /usr/irissys/csp/healthshare/ensdemo/
+WORKDIR /opt/irisapp
+RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/irisapp
+USER ${ISC_PACKAGE_MGRUSER}
+
+COPY  Installer.cls .
+
+COPY demo/cls demo/cls
+COPY demo/csp /usr/irissys/csp/healthshare/ensdemo/
 RUN echo "$IRIS_PASSWORD" >> /tmp/pwd.isc && /usr/irissys/dev/Container/changePassword.sh /tmp/pwd.isc
+COPY scripts/iris.script /tmp/iris.script
 
-SHELL ["/tmp/irissession.sh"]
-RUN \
-  do $SYSTEM.OBJ.Load("/tmp/Installer.cls", "ck") \
-  set sc = ##class(ENSDEMO.Installer).Install("/tmp/demo/cls")
-  
-SHELL ["/bin/bash", "-c"]
-CMD [ "-l", "/usr/irissys/mgr/messages.log" ]
-
-HEALTHCHECK --interval=5s CMD /irisHealth.sh || exit 1
+RUN iris start IRIS \
+    && iris session IRIS < /tmp/iris.script \
+    && iris stop IRIS quietly

@@ -10,15 +10,10 @@ XData Install [ XMLNamespace = INSTALLER ]
 <Manifest>
     <Log Text="Creating ${NAMESPACE} namespace and DB..." Level="0"/>
     <Default Name="RESOURCE" Value="%DB_${NAMESPACE}" />
-    <Namespace Name="${NAMESPACE}" Code="${NAMESPACE}" Data="${NAMESPACE}" Create="yes" Ensemble="0">
+    <Namespace Name="${NAMESPACE}" Code="${NAMESPACE}" Data="${NAMESPACE}" Create="yes" Ensemble="1">
         <Configuration>
             <Database Name="${NAMESPACE}" Dir="${MGRDIR}${DBNAME}" Create="yes" MountAtStartup="true"/>
         </Configuration>
-        <Log Text="Enable interoperability to ${NAMESPACE}..." Level="0"/>
-	    <Invoke Class="%Library.EnsembleMgr" Method="EnableNamespace" CheckStatus="true">
-            <Arg name="pTargetNS" Value="${NAMESPACE}"/>
-            <Arg name="pVerbose" Value="1"/>
-	    </Invoke>
         <IfDef Var="SOURCE">
             <Log Text="SOURCE defined - offline install from ${SOURCE}" Level="0"/>
             <Import File="${SOURCE}" Recurse="true"/>

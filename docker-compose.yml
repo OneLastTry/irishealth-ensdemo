@@ -1,8 +1,6 @@
 version: '3.7'
 services:
   ensdemo:
-    image: store/intersystems/irishealth-community:ensdemo
-    init: true
     build:
       context: .
     hostname: ensdemo
@@ -13,8 +11,11 @@ services:
     restart: on-failure
     volumes:
     - type: bind
-      source: ./src
-      target: /src
+      source: ./demo
+      target: /demo
     - type: bind
       source: ./shared
       target: /shared
+    - type: bind
+      source: .
+      target: /irisdev/app
