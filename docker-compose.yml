@@ -9,8 +9,7 @@ services:
     container_name: ensdemo
     ports:
     - "9091:51773"
-    - "9092:52773"
-    restart: on-failure
+    - "9092:52773"    
     volumes:
     - type: bind
       source: ./src

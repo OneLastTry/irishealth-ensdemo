@@ -3,7 +3,7 @@ Include %occInclude
 Class ENSDEMO.Installer
 {
 
-Parameter NAMESPACE As %String = "ENSDEMO";
+Parameter NAMESPACE As STRING = "ENSDEMO";
 
 XData Install [ XMLNamespace = INSTALLER ]
 {

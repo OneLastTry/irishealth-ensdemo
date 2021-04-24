@@ -1,13 +1,12 @@
-{ 
+{
     "objectscript.conn": {
         "active": true,
-        "label": "ENSDEMO",
-        "host": "localhost",
-        "port": 9092,
-        "username": "superuser",
-        
-        "password": "SYS",
+        "server": "iris",
         "ns": "ENSDEMO",
-        "https": false
+        "docker-compose": {
+            "service": "ensdemo",
+            "internalPort": 52773,
+            "file": "../docker-compose.yml"
+        }
     }
 }

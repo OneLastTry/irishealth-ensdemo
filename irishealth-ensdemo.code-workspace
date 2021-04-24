@@ -8,9 +8,27 @@
 		{
 			"name": "ensdemo",
 			"path": "src"
+		},
+		{
+			"name": "iris:ENSDEMO (read-only)",
+			"uri": "isfs-readonly://iris:ensdemo/"
 		}
 	],
 	"settings": {
-		"objectscript.conn.active": false
+		"objectscript.conn": {
+			"active": false
+		},
+		"intersystems.servers": {
+			"iris": {
+				"webServer": {
+					"scheme": "http",
+					"host": "localhost",
+					"port": 9092
+				},
+				"description": "ENSDEMO",
+				"username": "superuser",
+				"password": "SYS"
+			}
+		}
 	}
 }
