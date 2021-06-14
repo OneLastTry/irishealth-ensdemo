@@ -8,7 +8,7 @@ services:
     hostname: ensdemo
     container_name: ensdemo
     ports:
-    - "9091:51773"
+    - "9091:1972"
     - "9092:52773"    
     volumes:
     - type: bind
