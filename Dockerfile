@@ -1,7 +1,7 @@
 #ARG IMAGE=store/intersystems/irishealth-community:2019.4.0.383.0
 #ARG IMAGE=store/intersystems/irishealth-community:2020.1.0.202.0
 #ARG IMAGE=store/intersystems/irishealth-community:2020.2.0.211.0
-ARG IMAGE=store/intersystems/irishealth-community:2021.1.0.205.0
+ARG IMAGE=store/intersystems/irishealth-community:2021.1.0.215.3
 FROM $IMAGE AS IRISHealthIAMBuilder
 LABEL maintainer="Renan Lourenco <renan.lourenco@intersystems.com>"
 
