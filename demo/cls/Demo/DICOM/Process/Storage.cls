@@ -1,8 +1,9 @@
 Class Demo.DICOM.Process.Storage Extends EnsLib.DICOM.Process
 {
 
-/// This parameter names the operation used to provide storage
-Parameter SETTINGS = "OperationDuplexName";
+/// This first parameter names the operation used to provide storage, 
+/// and the second is the DIMSE timeout for requests
+Parameter SETTINGS = "OperationDuplexName,RequestTimeout";
 
 /// This keeps track of the OriginatingMessageID
 Property OriginatingMessageID As %Integer;
@@ -16,6 +17,12 @@ Property CurrentState As %String [ InitialExpression = "OperationNotConnected" ]
 /// This is the name of the operation providing storage
 Property OperationDuplexName;
 
+/// This property specifies, in seconds, the DIMSE timeout for STORE requests
+Property RequestTimeout As %Integer [ InitialExpression = 180 ];
+
+/// This keeps track of the number of pending wakeup calls
+Property WakeupCounter As %Integer [ InitialExpression = 0 ];
+
 /// Messages received here are instances of EnsLib.DICOM.Document sent to this
 /// process by the service or operation config items. In this demo, the process is ever
 /// in one of two states, the Operation is connected or not.
@@ -24,6 +31,31 @@ Method OnMessage(pSourceConfigName As %String, pInput As %Library.Persistent) As
     #dim tSC As %Status = $$$OK
     #dim tMsgType As %String
     do {
+        #; DIMSE timeout implemented with the Ens.Alarm request/response mechanism and a counter.
+        If (pInput.%Extends("Ens.AlarmResponse")) {
+
+            #; Decrement our wakeup counter.
+            Set ..WakeupCounter = ..WakeupCounter - 1
+
+            If (..WakeupCounter = 0) {
+                #; It's been RequestTimeout seconds since the last request.
+
+                #; Form an abort message
+                Set tCommandAbort=##class(EnsLib.DICOM.Command.Abort).%New($$$ABORTSOURCESERVICEPROVIDER,$$$ABORTREASONNOTSPECIFIED)
+
+                #; Ensure we try to abort both the operation and service associations
+                Set tSC = ..AbortAssociation(..OperationDuplexName,tCommandAbort)
+                If $$$ISERR(tSC) $$$LOGSTATUS(tSC)
+                Set tSC = ..AbortAssociation(..ServiceDuplexName,tCommandAbort)
+                If $$$ISERR(tSC) $$$LOGSTATUS(tSC)
+
+                #; And quit here.
+                Quit
+            }
+
+            #; At least one wakeup call was scheduled more recently, so this isn't DIMSE timeout.
+            Quit
+        }
        
         #; We should only ever see DICOM Documents here
         $$$ASSERT(pInput.%Extends("EnsLib.DICOM.Document"))
@@ -56,6 +88,11 @@ Method OnMessage(pSourceConfigName As %String, pInput As %Library.Persistent) As
                 
                 #; We can forward the document to the operation
                 Set tSC=..SendRequestAsync(..OperationDuplexName,pInput,0)
+
+                #; Set a wakeup call for this request
+                Set ..WakeupCounter = ..WakeupCounter + 1
+                Set tSC = ..ScheduleWakeupCall(..RequestTimeout)
+                If $$$ISERR(tSC) $$$LOGSTATUS(tSC)
             }
             
         } elseif pSourceConfigName=..OperationDuplexName {
@@ -104,8 +141,12 @@ Method OnAssociationEstablished(pSourceConfigName As %String, pInput As EnsLib.D
         }
         
     } else {
+        #; Apply DIMSE timeout between the initial association and the first request as well
+        Set ..WakeupCounter = ..WakeupCounter + 1
+        Set tSC = ..ScheduleWakeupCall(..RequestTimeout)
+        If $$$ISERR(tSC) $$$LOGSTATUS(tSC)
         
-        #; Need to establish an associaton with the operation (we will be called back here at 
+        #; Need to establish an association with the operation (we will be called back here at 
         #; OnAssociationEstablished()
         Set tSC=..EstablishAssociation(..OperationDuplexName)
     }
