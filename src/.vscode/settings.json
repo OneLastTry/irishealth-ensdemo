@@ -3,10 +3,5 @@
         "active": true,
         "server": "iris",
         "ns": "ENSDEMO",
-        "docker-compose": {
-            "service": "ensdemo",
-            "internalPort": 52773,
-            "file": "../docker-compose.yml"
-        }
     }
 }

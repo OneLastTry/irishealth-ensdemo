@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   ensdemo:
-    image: irishealth-community/ensdemo:base
+    image: intersystems/demo/irishealth/ensdemo:latest
     init: true
     build:
       context: .
