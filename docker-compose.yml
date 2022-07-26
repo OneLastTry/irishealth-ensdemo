@@ -5,6 +5,8 @@ services:
     init: true
     build:
       context: .
+      args:
+        ARCH: $ARCH
     hostname: ensdemo
     container_name: ensdemo
     ports:
