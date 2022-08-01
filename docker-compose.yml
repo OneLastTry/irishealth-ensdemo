@@ -9,6 +9,7 @@ services:
         ARCH: $ARCH
     hostname: ensdemo
     container_name: ensdemo
+    restart: unless-stopped
     ports:
     - "9091:1972"
     - "9092:52773"    
