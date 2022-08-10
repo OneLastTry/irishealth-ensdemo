@@ -1,5 +1,5 @@
 ARG ARCH
-ARG IMAGE=containers.intersystems.com/intersystems/irishealth-community$ARCH:2022.2.0.293.0
+ARG IMAGE=containers.intersystems.com/intersystems/irishealth-community$ARCH:2022.2.0.304.0
 
 FROM $IMAGE AS IRISBuilder
 LABEL maintainer="Renan Lourenco <renan.lourenco@intersystems.com>"
