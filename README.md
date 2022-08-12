@@ -2,8 +2,6 @@
 
 Basic setup of ENSDEMO content into InterSystems IRIS for Health.
 
-**Version:** _containers.intersystems.com/intersystems/irishealth-community:2022.2.0.281.0_
-
 **Make sure you have Docker up and running before starting.**
 
 ## Setup
