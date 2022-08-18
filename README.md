@@ -7,7 +7,6 @@ Basic setup of ENSDEMO content into InterSystems IRIS for Health.
 ## Setup
 
 Clone the repo `git clone https://github.com/OneLastTry/irishealth-ensdemo.git` and then execute from the main directory `docker-compose build`.
-_(for arm64 run `docker-compose --env-file=.env-arm64 build`)_
 
 ## Execution
 
