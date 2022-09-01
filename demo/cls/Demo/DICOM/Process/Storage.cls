@@ -285,13 +285,16 @@ Storage Default
 <Value>DocumentFromService</Value>
 </Value>
 <Value name="3">
-<Value>DocumentFromOperation</Value>
-</Value>
-<Value name="4">
 <Value>CurrentState</Value>
 </Value>
-<Value name="5">
+<Value name="4">
 <Value>OperationDuplexName</Value>
+</Value>
+<Value name="5">
+<Value>RequestTimeout</Value>
+</Value>
+<Value name="6">
+<Value>WakeupCounter</Value>
 </Value>
 </Data>
 <DefaultData>StorageDefaultData</DefaultData>
