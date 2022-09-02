@@ -55,3 +55,9 @@ Using [InterSystems ObjectScript](https://marketplace.visualstudio.com/items?ite
 ```bash
 docker-compose stop
 ```
+
+## Support to ZPM
+
+```bash
+zpm "install irishealth-ensdemo"
+```
