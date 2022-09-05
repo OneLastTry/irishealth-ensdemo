@@ -6,7 +6,7 @@ Basic setup of ENSDEMO content into InterSystems IRIS for Health.
 
 [![Demo](https://img.shields.io/badge/Demo%20on-Cloud%20Run%20Deploy-F4A460)](https://irishealth-ensdemo.demo.community.intersystems.com/csp/healthshare/ensdemo/EnsPortal.Productions.zen?$NAMESPACE=ENSDEMO&$NAMESPACE=ENSDEMO)
 
-[![Quality Gate Status](https://community.objectscriptquality.com/api/project_badges/measure?project=SergeyMi37%2Firishealth-ensdemo&metric=alert_status)](https://community.objectscriptquality.com/dashboard?id=SergeyMi37%2Firishealth-ensdemo)
+[![Quality Gate Status](https://community.objectscriptquality.com/api/project_badges/measure?project=OneLastTry%2Firishealth-ensdemo&metric=alert_status)](https://community.objectscriptquality.com/dashboard?id=OneLastTry%2Firishealth-ensdemo)
 
 
 ## Setup
