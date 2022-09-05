@@ -4,9 +4,9 @@ Basic setup of ENSDEMO content into InterSystems IRIS for Health.
 
 **Make sure you have Docker up and running before starting.**
 
-[![Demo](https://img.shields.io/badge/Demo%20on-Cloud%20Run%20Deploy-F4A460)](https://irishealth-ensdemo.demo.community.intersystems.com/csp/sys/%25CSP.Portal.Home.zen)
+[![Demo](https://img.shields.io/badge/Demo%20on-Cloud%20Run%20Deploy-F4A460)](https://irishealth-ensdemo.demo.community.intersystems.com/csp/healthshare/ensdemo/EnsPortal.Productions.zen?$NAMESPACE=ENSDEMO&$NAMESPACE=ENSDEMO)
 
- [![Quality Gate Status](https://community.objectscriptquality.com/api/project_badges/measure?project=intersystems_iris_community%2Firishealth-ensdemo&metric=alert_status)](https://community.objectscriptquality.com/dashboard?id=intersystems_iris_community%2Firishealth-ensdemo)
+[![Quality Gate Status](https://community.objectscriptquality.com/api/project_badges/measure?project=SergeyMi37%2Firishealth-ensdemo&metric=alert_status)](https://community.objectscriptquality.com/dashboard?id=SergeyMi37%2Firishealth-ensdemo)
 
 
 ## Setup
