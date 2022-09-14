@@ -4,6 +4,11 @@ Basic setup of ENSDEMO content into InterSystems IRIS for Health.
 
 **Make sure you have Docker up and running before starting.**
 
+[![Demo](https://img.shields.io/badge/Demo%20on-Cloud%20Run%20Deploy-F4A460)](https://irishealth-ensdemo.demo.community.intersystems.com/csp/healthshare/ensdemo/EnsPortal.Productions.zen?$NAMESPACE=ENSDEMO&$NAMESPACE=ENSDEMO)
+
+[![Quality Gate Status](https://community.objectscriptquality.com/api/project_badges/measure?project=OneLastTry%2Firishealth-ensdemo&metric=alert_status)](https://community.objectscriptquality.com/dashboard?id=OneLastTry%2Firishealth-ensdemo)
+
+
 ## Setup
 
 Clone the repo `git clone https://github.com/OneLastTry/irishealth-ensdemo.git` and then execute from the main directory `docker-compose build`.
