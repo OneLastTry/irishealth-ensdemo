@@ -2,6 +2,6 @@
     "objectscript.conn": {
         "active": true,
         "server": "iris",
-        "ns": "ENSDEMO",
+        "ns": "ENSDEMO"
     }
 }

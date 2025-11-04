@@ -1,7 +1,6 @@
-ARG ARCH
-ARG IMAGE=rlourenc/irishealth-community:latest
+ARG IMAGE=containers.intersystems.com/intersystems/irishealth-community:latest-em
 
-FROM $IMAGE AS IRISBuilder
+FROM $IMAGE AS builder
 LABEL maintainer="Renan Lourenco <renan.lourenco@intersystems.com>"
 
 USER ${ISC_PACKAGE_MGRUSER}
@@ -31,14 +30,14 @@ SHELL ["/bin/bash", "-c"]
 RUN echo "$IRIS_PASSWORD" >> /tmp/pwd.isc && /usr/irissys/dev/Container/changePassword.sh /tmp/pwd.isc
 
 # 2nd stage to reduce size
-FROM $IMAGE AS IRISMain
+FROM $IMAGE AS main
 LABEL maintainer "Renan Lourenço <renan.lourenco@intersystems.com>"
 USER root
 # replace in standard kit with what we modified in first stage
-COPY --from=IRISBuilder /usr/irissys/iris.cpf /usr/irissys/.
-COPY --from=IRISBuilder /usr/irissys/mgr/IRIS.DAT /usr/irissys/mgr/.
-COPY --from=IRISBuilder /usr/irissys/mgr/hssys/IRIS.DAT /usr/irissys/mgr/hssys/.
-COPY --from=IRISBuilder /usr/irissys/mgr/ensdemo/. /usr/irissys/mgr/ensdemo/.
+COPY --from=builder /usr/irissys/iris.cpf /usr/irissys/.
+COPY --from=builder /usr/irissys/mgr/IRIS.DAT /usr/irissys/mgr/.
+COPY --from=builder /usr/irissys/mgr/hssys/IRIS.DAT /usr/irissys/mgr/hssys/.
+COPY --from=builder /usr/irissys/mgr/ensdemo/. /usr/irissys/mgr/ensdemo/.
 COPY ./demo/csp /usr/irissys/csp/healthshare/ensdemo/
 # need to reset ownership for files copied
 RUN \
